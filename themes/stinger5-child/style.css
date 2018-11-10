@@ -1,0 +1,635 @@
+/*
+Theme Name: stinger5-child
+Template: stinger5ver20141011
+*/
+@import url('../stinger5ver20141011/style.css');
+
+#wrapper {
+    max-width: 1100px;
+}
+section {
+    margin-bottom: 1em;
+}
+/*--------------------------------
+Webフォント設定
+---------------------------------*/
+/*--------------------------------
+メニュー
+---------------------------------*/
+nav li {
+    padding-right: 5px !important;
+    padding-left: 5px !important;
+}
+nav li li {
+}
+nav li a {
+}
+.menu-navigation-container {
+}
+nav li a:hover {
+}
+nav li li {
+}
+nav li a {
+}
+.menu-navigation-container {
+}
+nav li a:hover {
+}
+/*追記*/
+.smanone ul li{
+    position: relative;
+    float: left;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    z-index:1;
+}
+.smanone ul li a{
+    display: block;
+    margin: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.smanone ul li ul{
+    list-style: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 250%;
+    margin: 0;
+    padding: 0;
+}
+.smanone ul li ul li{
+    overflow: hidden;
+    height:0;
+    margin: 0;
+    padding: 0;
+}
+.smanone ul li ul li a{
+    text-align:left;
+}
+.smanone ul li:hover ul li{
+    overflow: visible;
+    width:180px;
+    height: 23px;
+    margin: 0;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background: #f8f8f8;
+    border:1px #ccc dotted;
+}
+/*--------------------------------
+アコーディオン
+---------------------------------*/
+#xs-menu-btn {
+    margin: 0 10px;
+    padding: 10px 0;
+    overflow: hidden;
+}
+#xs-menu-btn span.op {
+    padding: 8px 6px;
+    float: right;
+    text-align: right;
+    cursor: pointer;
+}
+#xs-navigation {
+    display: none;
+    width: 100%;
+    border-top: 2px solid #333;
+    background: #fff;
+    position: absolute;
+    left: 0;
+}
+#xs-navigation li {
+    line-height: 30px;
+}
+#xs-navigation li a {
+    font-size: 14px;
+    display: block;
+    padding: 4px 40px 4px 16px;
+    background: #fff;
+    border-bottom: 1px solid #ddd;
+    text-decoration: none;
+    position: relative;
+}
+#xs-navigation li a:hover {
+    color: #fff;
+    background: #333;
+}
+#xs-navigation li a:after {
+    color: #bbb;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    margin: -12px 0 0;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    content: ">";
+}
+#xs-navigation li ul li a {
+    font-size: 80%;
+    padding: 0 24px;
+}
+#xs-navigation li ul li ul li a {
+    padding: 0 32px;
+}
+#xs-navigation li ul li ul li ul li a {
+    padding: 0 40px;
+}
+ 
+#main-navigation {
+    float: left;
+    border-right: 1px dotted #ccc;
+}
+#main-navigation li {
+    list-style: none;
+    font-size: 13px;
+    border-left: 1px dotted #ccc;
+    float: left;
+    display: inline;
+    position: relative;
+}
+#main-navigation li a {
+    padding: 5px 10px;
+    display: block;
+    color: #1a1a1a;
+    text-align: left;
+/*  text-align: center; */
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+#main-navigation li a:hover {
+    color: #b22222;
+    text-decoration: underline;
+}
+#main-navigation li a span {
+    font-size: 10px;
+    font-weight: normal;
+    display: block;
+}
+#main-navigation li ul {
+    display: none;
+    background: #f8f8f8;
+    font-size: 11px;
+    border-top: 1px dotted #ccc;
+    border-left: 1px dotted #ccc;
+    border-right: 1px dotted #ccc;
+    padding: 0;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin: 0 0 0 -1px;
+    z-index: 999;
+}
+#main-navigation li ul li {
+    border: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+    position: relative;
+}
+#main-navigation li ul li a {
+    width: 100px;
+    padding: 5px 15px;
+    border-bottom: 1px dotted #ccc;
+}
+#main-navigation li ul li ul {
+    top: 0;
+    left: 100%;
+    margin: 0;
+}
+
+.acordion_tree li {
+    float: left;
+    font-size: 13px;
+    padding-left: 10px;
+    display: inline;
+    padding-right: 10px;
+    border-left-width: 1px;
+    border-left-style: dotted;
+    border-left-color: #CCC;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+.acordion_tree li ul{
+    margin: 0;
+    padding: 0;
+    display:none;
+    width:100%
+}
+.acordion_tree li ul li{
+    margin: 0;
+    padding: 0;
+}
+.acordion_tree li a:hover{
+    .sub-menu{display:block;}
+}
+.acordion_tree li a:active{
+    .acordion_tree li ul{display:block;}
+}
+/*--------------------------------
+各フォント設定
+---------------------------------*/
+p {
+    font-size: 16px;
+    line-height: 27px;
+    margin-bottom: 20px;
+}
+
+/*小見出し*/
+.post h3 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    margin-top: 10px;
+    padding-top: 15px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-left: 45px;
+    color: #1a1a1a;
+    line-height: 27px;
+    background-image: url(images/cah3.png);
+    background-repeat: no-repeat;
+    background-position: left center;
+    margin-left: 0px;
+    border-bottom: 1px #999999 dotted;
+}
+
+/*リスト */
+.post ul {
+    list-style-type: disc;
+    padding-top: 0px; /*記事内にリスト要素を入れたときの上部の余白を削除。*/
+    padding-right: 0px;
+    padding-bottom: 20px;
+/*  padding-left: 0px; */
+    margin-bottom: 10px;
+}
+.post ul li {
+    font-size: 16px;
+    line-height: 27px;
+    margin-bottom: 5px;
+}
+.post ol {
+    list-style-type: decimal;
+    padding-top: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    margin-bottom: 10px;
+}
+
+.post ol li {
+    font-size: 16px;
+    line-height: 27px;
+}
+
+/*-----------------------------
+サイドバーの「NEW POST」と「Wordpress Popular Posts」の表示
+------------------------------*/
+/*
+リストの最後の要素だけ余白が大きいので修正
+*/
+.side-widget dl:last-child {
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+}
+
+.side-widget dd h5 {
+    font-size: 16px;
+    font-weight: bold;
+    padding: 0px;
+    margin-bottom: 5px;
+}
+.side-widget dt {
+    float: left;
+    width: 100px;
+}
+.side-widget dt img {
+    width: 100px;
+}
+.side-widget dd {
+    padding-left: 110px;
+}
+.side-widget dl {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom-width: 1px;
+    border-bottom-style: dotted;
+    border-bottom-color: #ccc;
+}
+.side-widget dl:last-child {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-style: none;
+}
+
+#kanren dl:last-child {
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+}
+
+/* 抜粋文字 */
+.side-widget .clearfix dd p {
+    font-size: 13px;
+    color: #666;
+    line-height: 18px;
+}
+.side-widget .clearfix dd h5 a {
+    color: #333;
+    text-decoration: none;
+}
+.side-widget .clearfix dd h5 a:hover {
+    color: #b22222;
+}
+
+/*--------------------------------
+SNS
+---------------------------------*/
+.sns li {
+    margin: 5px 0;
+}
+.sns .snsb li {
+    float: left;
+    margin-right: 5px;
+    list-style-type: none;
+}
+.post .sns .snsb.clearfix {
+    padding-top: 5px;
+    padding-right: 0px;
+    padding-bottom: 5px;
+    padding-left: 0px;
+}
+/*-----------------------------
+appHtml
+------------------------------*/
+img.appIconImg {
+    vertical-align: middle;
+}
+.appName {
+    font-size: small;
+}
+.appPrice {
+    font-size: small;
+}
+.appSeller {
+    font-size: small;
+}
+
+/*-----------------------------
+for Wordpress Popular Posts
+------------------------------*/
+/*
+.wpp-list div dl dd a {
+    color: #1a1a1a;
+    text-decoration: none;
+}
+.related_post_title {
+    padding-left: 45px !important;
+}
+h3.related_post_title {
+    padding-left: 45px !important;
+}
+*/
+/*-----------------------------
+Hatebu
+------------------------------*/
+img.hatebuCount {
+    vertical-align: middle;
+    display: inline-block;
+}
+
+/*-----------------------------
+   購読者数つきFeedlyボタン 
+------------------------------*/
+.feedly-followers {
+    display: block;
+}
+/* 購読者数の表示部分 */
+.feedly-count {
+    margin-bottom: 6px;
+    width: 62px;  ←カウンタの幅
+    height: 31px;  ←カウンタの高さ
+    background-color: #FFF;
+    position: relative;
+    border: 1px solid #669966;
+    border-radius: 4px;
+    padding: 0 4px;
+    font-family: Arial;
+    font-size: 16px;
+    line-height: 31px;
+    text-align: center;
+    display: block;
+  background: white;
+}
+/* 購読者数吹き出し部分 */
+.fdly-count:after,
+.fdly-count:before {
+    border: solid transparent;
+    content: ' ';
+    right: 43%;
+    position: absolute;
+}
+.fdly-count:before {
+    border-width: 5px;
+    border-top-color: #B0C1D8;
+    top: 32px;
+}
+.fdly-count:after {
+    border-width: 5px;
+    border-top-color: #FFF;
+    top: 30px;
+}
+/* 忍者レコメンド */
+.ninja-recommend {
+position: relative !important;
+}
+
+/* スクリーンショット 横並び用 */
+
+/*
+----------------------------------------
+HTML
+画像を並べたい位置に下記のHTMLを書き込む
+----------------------------------------
+<ul class="images clearfix">
+ <li><img src="（画像1）" /></li>
+ <li><img src="（画像2）" /></li>
+  </ul>
+*/
+ul.images { list-style-type: none; }    /* リストマークを非表示 */
+ul.images li {
+ float: left;           /* 左回り込み */
+ margin: 0 5px 5px 0;   /* 右と下にスペース 5px */
+}
+ul.images li a { display: block; } /* リンクをブロックレベルへ */
+
+/*--------------------------------
+検索フォーム
+---------------------------------*/
+#container #wrap #wrap-in #search {
+  padding-top: 20px;
+  padding-bottom: 0px;
+}
+#s {
+    height: 33px;
+    color: #1a1a1a;
+    font-size: 14px;
+    border-radius: 0;
+        border-style: ridge;
+    background-color: #ffffff !important;
+    z-index: 10;
+    padding: 5px 65px 10px 5px;
+    width: 100%;
+    box-sizing: border-box;
+}
+#searchsubmit {
+    border-radius: 0;
+    background-color: #8b9dc3 !important;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    width: 50px;
+    height: 32px;
+    z-index: 20;
+}
+*:first-child + html #searchsubmit {
+  top: 1px;
+}
+#container #wrap #wrap-in #side #search #cse-search-box {
+  position: relative;
+}
+/*--------------------------------
+Pocket News Generator
+---------------------------------*/
+h3.pocket-site-name {
+    width: 100%;
+    font-size: 120%;
+    padding: 5px;
+    margin: 10px 0;
+    background-color: #3b5998;
+    color: #f2f2f2;
+    text-decoration: none;
+    background-image: none;
+    background-repeat: no-repeat;
+    border-bottom: none;
+}
+/*--------------------------------
+mini sns box
+---------------------------------*/
+.mini_sns_box {
+    margin: 0;
+    padding: 8px 0 0 0px;
+    text-align: left;
+    vertical-align: baseline !important;
+/*
+    border-top: 1px dotted #ddd;
+*/
+}
+.mini_sns {
+    margin-right: 10px;
+    font-weight: bold;
+    color: #666;
+    display: inline !important;
+    vertical-align: middle !important;
+}
+.mini_sns img{
+    margin-right: 0;
+    display: inline !important;
+    vertical-align: middle !important;
+}
+/* Millard */
+.ssLimitedContainerHeader {
+    font-size: 20px;
+/*  margin-bottom: 20px;*/
+    margin-top: 10px;
+    padding-top: 15px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-left: 45px;
+    color: #1a1a1a;
+    line-height: 27px;
+    background-image: url(images/cah3.png);
+    background-repeat: no-repeat;
+    background-position: left center;
+    margin-left: 0px;
+/*  border-bottom: 1px #999999 dotted; */
+}
+
+/* はてなサイドバー */
+.hatena-bookmark-widget-title{
+  font-size: 14px !important;
+}
+
+.hatena-bookmark-widget-title img{
+    display: inline;
+      vertical-align: middle;
+    margin-bottom: 0px !important;
+}
+
+/* モバイル用アドセンス */
+.mb_adsense{
+    margin-left: -10px !important;
+}
+
+/* header and footer */
+ul.article_foot li {
+  line-height: 120%;
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+/*--------------------------------
+ブログカード
+---------------------------------*/
+.blog-card{
+  padding:12px;
+  margin:10px 0;
+  border:1px solid #ddd;
+  word-wrap:break-word;
+  max-width:100%;
+  width:474px;
+  border-radius:5px;
+}
+
+.blog-card-thumbnail{
+  float:left;
+}
+
+.blog-card-content{
+  margin-left:110px;
+  line-height:120%;
+}
+.blog-card-title{
+  margin-bottom:5px;
+}
+
+.blog-card-title a{
+  font-weight:bold;
+  text-decoration:none;
+  color:#111;
+}
+
+.blog-card-excerpt{
+  color:#333;
+  font-size:90%;
+}
+
+.blog-card-footer{
+  font-size:70%;
+  color:#777;
+  margin-top:5px;
+}
+
+.clear{
+  clear:both;
+}

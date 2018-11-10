@@ -1,0 +1,168 @@
+/*
+Wordpress Popular Posts plugin stylesheet
+Developed by Hector Cabrera
+
+Use the following classes to style your popular posts list as you like.
+*/
+
+.wpp-list { /* UL element */
+    display:block;
+    float:left;
+    margin:0 5px 0 0 !important;
+    padding-left: 5px !important;
+    padding-bottom:0 !important;
+    padding-bottom: 3px !important;
+    border:none;
+}
+
+ul.wpp-list { /* UL element */
+    list-style-type: none !important;
+    margin-bottom: 0px !important;
+    padding-top: 3px !important;
+    padding-left: 3px !important;
+    clear: both;
+}
+
+ul.wpp-list li {
+    position: relative !important;
+    display: inline-block !important;
+    vertical-align: top !important;
+    zoom: 1 !important;
+    *display: inline !important;
+    width: 100px !important;
+    margin: 5px 2px 0px 0px !important;
+    padding: 0 !important;
+    background: none !important;
+    list-style-type: none;
+}
+ul.wpp-list li a {
+    color: #000 !important;
+    position: relative !important;
+    display: block !important;
+    font-size: 12px !important;
+    line-height: 1.5em !important;
+    text-decoration: none;
+    margin: 1px 0px 0px 0px !important;
+    text-indent: 0 !important;
+}
+ul.wpp-list a:hover {
+    color: #666 !important;
+    text-decoration: underline !important;
+    cursor: auto;
+}
+ul.wpp-list a:link,ul.wpp-list a:visited {
+   color: #000;
+   text-decoration: none; 
+   font-weight: bold;
+}
+ul.wpp-list li img {
+    display: block !important;
+    width: 100px !important;
+    height: 80px !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: none !important;
+    border: none !important;
+
+    border-radius: 3px !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+ul.wpp-list li small {
+    font-size: 80%;
+}
+
+/************************************************/
+/* for mobile */
+/************************************************/
+.wpp-list-mb { 
+    border-color: #bebebe;
+    border-style: solid;
+    border-width: 1px;
+}
+
+ul.wpp-list-mb { /* UL element */
+    list-style-type: none;
+    margin-bottom: 0px !important;
+    padding-top: 3px !important;
+    padding-left: 3px !important;
+    padding-bottom: 3px !important;
+    clear: both;
+}
+
+ul.wpp-list-mb li {
+    display: inline-block;
+    padding-bottom: 2px !important;
+    margin-bottom: 2px !important;
+    border-bottom-width: 1px;
+    border-bottom-style: dotted;
+    border-bottom-color: #ccc;
+    line-height: 110% !important;
+    clear: both;
+}
+
+/*
+リストの最後の要素だけ線削除
+*/
+ul.wpp-list-mb li:last-child {
+    border: none;
+    clear: both;
+}
+
+ul.wpp-list-mb li a{
+/*  position: relative !important;*/
+/*  display: inline-block !important;*/
+    font-size: 12px !important;
+    line-height: 1.5em !important; /* original 1.5em */
+    text-decoration: none !important;
+    margin-bottom: 5px !important;
+    text-indent: 0 !important;
+}
+ul.wpp-list-mb li a:link,ul.wpp-list-mb li a:visited {
+   color: #000;
+   text-decoration: none; 
+   font-weight: bold;
+}
+
+ul.wpp-list-mb li img {
+}
+
+        /* title styles */
+        .wpp-post-title {
+        }
+        
+        /* thumbnail styles */
+        .wpp-thumbnail {
+            display:inline;
+            float:left;
+            margin:0 5px 0 0;
+            border:none;
+        }
+        
+        /* excerpt styles */
+        .wpp-excerpt {
+        }
+        
+        /* Stats tag styles */
+        .post-stats {
+            display:block;
+            font-size:9px;
+            font-weight:bold;
+        }
+            
+            .wpp-comments {
+            }
+            
+            .wpp-views {
+            }
+            
+            .wpp-author {
+            }
+            
+            .wpp-date {
+            }
+        
+        /* WP-PostRatings styles */
+        .wpp-rating {
+        }

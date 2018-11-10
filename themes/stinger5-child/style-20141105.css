@@ -1,0 +1,85 @@
+/*
+Theme Name: stinger5-child
+Template: stinger5ver20141011
+*/
+@import url('../stinger5ver20141011/style.css');
+
+#wrapper {
+    max-width: 1100px;
+}
+
+/*-----------------------------
+appHtml
+------------------------------*/
+img.appIconImg {
+	vertical-align: middle;
+}
+.appName {
+	font-size: small;
+}
+.appPrice {
+	font-size: small;
+}
+.appSeller {
+	font-size: small;
+}
+
+/*-----------------------------
+for Wordpress Popular Posts
+------------------------------*/
+.wpp-list div dl dd a {
+	color: #1a1a1a;
+	text-decoration: none;
+}
+/*-----------------------------
+Hatebu
+------------------------------*/
+img.hatebuCount {
+	vertical-align: middle;
+}
+
+/*-----------------------------
+   購読者数つきFeedlyボタン 
+------------------------------*/
+#feedly-followers {
+    display: block;
+}
+/* 購読者数の表示部分 */
+#feedly-count {
+    margin-bottom: 6px;
+    width: 62px;  ←カウンタの幅
+    height: 31px;  ←カウンタの高さ
+    background-color: #FFF;
+    position: relative;
+    border: 1px solid #669966;
+    border-radius: 4px;
+    padding: 0 4px;
+    font-family: Arial;
+    font-size: 16px;
+    line-height: 31px;
+    text-align: center;
+    display: block;
+  background: white;
+}
+/* 購読者数吹き出し部分 */
+.fdly-count:after,
+.fdly-count:before {
+    border: solid transparent;
+    content: ' ';
+    right: 43%;
+    position: absolute;
+}
+.fdly-count:before {
+    border-width: 5px;
+    border-top-color: #B0C1D8;
+    top: 32px;
+}
+.fdly-count:after {
+    border-width: 5px;
+    border-top-color: #FFF;
+    top: 30px;
+}
+/* 忍者レコメンド */
+.ninja-recommend {
+position: relative !important;
+}

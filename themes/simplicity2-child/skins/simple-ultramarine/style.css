@@ -1,0 +1,425 @@
+/*
+  Name:simple-ultramarine
+  Priority: 100
+  Author: Kenji
+  Author URI: http://xn--dckta2f5e8cqc.net/
+*/
+
+
+/************************************
+** メインカラー(背景)
+************************************/
+
+body{
+/*
+    background-image: url(http://xn--dckta2f5e8cqc.net/wp-content/uploads/2016/12/gradation.png);
+*/
+/*
+    background-image: url(https://masalog.net/wp-content/themes/simplicity2-child/skins/simple-ultramarine/gradation.png);
+*/
+    background-image: url(./gradation.png);
+      background-size: cover;
+    background-attachment: fixed;
+}
+
+/************************************
+** 見出し（H1〜4)
+************************************/
+
+.article h1 {
+ font-weight: 800;
+ font-size: 1.8rem;
+ line-height: 1.3;
+}
+
+.article h2 {
+ font-size: 22px;
+ line-height: 28px;
+ padding: 15px 10px 12px 20px;
+ background: #4c6c83;
+ color: #FFF;
+ margin: 25px 0;
+ font-weight: bold;
+ position: relative;
+ border:none;
+}
+.article h2:before{
+ content: "";
+ position: absolute;
+ top: 0;
+ left: 0;
+ border-width: 0px 0px 16px 16px;
+ border-style: solid;
+ border-color: #FFF #4c6c83 #4c6c83 #FFF;
+
+ background: #4c6c83;
+ display: block;
+ width: 0;
+}
+
+.entry h2 a{
+ font-weight: 700;
+ font-size: 1.2rem;
+ line-height: 1.4;
+}
+
+.article h3{
+ font-size: 1.3rem;
+ font-weight: 600;
+ line-height: 1.3;
+ padding: 5px 15px;
+ border-left: 6px solid #4c6c83;
+ border-bottom: none !important;
+ color: #000;
+ margin:35px 0px 30px;
+}
+
+.article h4{
+ font-size: 1.1rem;
+ font-weight: 600;
+ line-height: 1.3;
+ padding: 5px 15px;
+ border-bottom: none !important;
+ border-left: 2px solid #4c6c83;
+ color: #000;
+ margin:35px 5px 20px;
+}
+
+
+/************************************
+** アンカー
+************************************/
+
+a {
+  color: #00afcc;
+}
+
+.entry-card .entry-snippet {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+}
+
+.entry-tile .entry-read {
+  margin-bottom: 7px;
+}
+
+.entry-tile .entry-read a.entry-read-link {
+  padding: 2px 25px;
+}
+
+/*---------------------------------
+トップページの記事を読む表示の装飾
+--------------------------------*/
+.entry-read a{
+ color:#ffffff;
+ font-size:14px;
+ background-color:#4c6c83;
+ border:1px solid #4c6c83;
+ border-radius:2px;
+ padding:3px 5px 3px 5px;
+ text-decoration:none;
+ }
+ 
+.entry-read a:hover{
+ color:#fff;
+ background-color:#7c869b;
+ border:1px solid #7c869b;
+}
+
+/*---------------------------------
+記事を読むを右に
+--------------------------------*/
+.entry-read {
+  text-align: right;
+  margin-right: 10px;
+}
+
+
+/************************************
+** レイアウト（Layout）
+************************************/
+
+#header-in, #navi-in, #body-in, #footer-in {
+  width: 1106px;
+}
+
+@media screen and (max-width: 1110px) {
+  #header-in, #navi-in, #body-in, #footer-in {
+    width: 740px;
+  }
+  #sidebar {
+    width: auto;
+  }
+}
+
+#header {
+  background-color:#fff
+}
+
+#main {
+  padding: 20px 30px;
+  border: none;
+  background-color:rgba( 255, 255, 255, 0.7 );
+}
+
+/*---------------------------------
+余白の並び調整で綺麗に
+--------------------------------*/
+.home #main{
+    padding:5px 5px;
+}
+
+/*---------------------------------
+記事欄の背景を白にする
+--------------------------------*/
+#main .entry {  
+    background-color:#fff;/* エントリーの背景は白 */
+}
+
+/*---------------------------------
+余白調整でさらに見た目整える
+--------------------------------*/
+#main .entry {  
+    width:auto;
+    padding:10px;
+    margin-bottom:12px;
+}
+
+/*---------------------------------
+影を付けて立体的に
+--------------------------------*/
+#main .entry {  
+    border:1px solid rgb(238, 238, 238);
+    box-shadow:rgba(0, 0, 0, 0.509804) 9px 9px 10px -4px;
+    -webkit-box-shadow:rgba(0, 0, 0, 0.509804) 9px 9px 10px -4px;
+    -moz-box-shadow:rgba(0, 0, 0, 0.509804) 9px 9px 10px -4px;
+}
+
+
+/*---------------------------------
+サムネイル画像が拡大する
+--------------------------------*/
+.entry-thumb,.wpp-thumbnail{
+  overflow: hidden;
+}
+.entry-thumb img,.wpp-thumbnail img{
+  transition: 0.6s ;
+}
+ 
+.entry-thumb img:hover,.wpp-thumbnail:hover {
+   opacity: 0.6;
+   -moz-transform: scale(1.1,1.1);
+  -webkit-transform: scale(1.1,1.1);
+  -o-transform: scale(1.1,1.1);
+  -ms-transform: scale(1.1,1.1);
+}
+
+
+#sidebar {
+  width: 336px;
+  padding: 5px 8px;
+  border-radius: 4px;
+  background-color:rgba( 255, 255, 255, 0.7 );
+}
+
+
+/************************************
+** ヘッダー
+************************************/
+
+#site-title a {
+  color: #4c6c83;
+}
+
+#site-description {
+  color: #606060;
+}
+
+
+/************************************
+** グローバルナビメニュー
+************************************/
+
+#navi {
+  border-top: 2px solid #474a4d;
+  border-bottom: 2px solid #474a4d;
+  background-color: #4c6c83;
+}
+
+#navi ul {
+  border: none;
+  background: none;
+}
+
+#navi ul li a {
+  color: #fff;
+}
+
+#navi ul li a:hover {
+  background-color: #677f93;
+}
+
+#navi ul.sub-menu, #navi ul.children {
+  border-top-color: #474a4d;
+  background-color: #2b2b2b;
+}
+
+#navi .sub-menu li, #navi .children li {
+  height: auto;
+}
+
+#navi .sub-menu li a, #navi .children li a {
+  padding: 14px 10px;
+}
+
+
+/************************************
+** メインカラム（#main、記事、固定ページなど）
+************************************/
+
+.post-meta {
+    margin:0 0 10px 0;
+    padding:2px 8px;
+    border-width:5px 0;
+    border-color:#4c6c83;
+    border-style:solid;
+    background:#fff;
+    color:#4c6c83;
+    line-height:140%;
+    font-size: 13px;
+    text-align:center;
+}
+
+/************************************
+** index.phpのリスト
+************************************/
+
+.entry .post-meta {
+  margin:0 0 10px 0;
+    padding:2px 8px;
+    border-width:5px 0;
+    border-color:#4c6c83;
+    border-style:solid;
+    background:#fff;
+    color:#4c6c83;
+    line-height:140%;
+    font-size: 13px;
+    text-align:center;
+}
+
+
+/************************************
+** 前の記事へ、次の記事へ
+************************************/
+
+.navigation a span {
+  color: #4c6c83;
+}
+
+
+/************************************
+** 関連記事（Relation）
+************************************/
+
+/*---------------------------------
+関連記事の記事を読む装飾
+--------------------------------*/
+.related-entry-read a{
+ color:#fff;
+ font-size:14px;
+ background-color:#4c6c83;
+ border:1px solid #4c6c83;
+ border-radius:2px;
+ padding:3px 10px 3px 5px;
+ text-decoration:none;
+ }
+
+.related-entry-read a:hover{
+ color:#fff;
+ background-color:#677f93;
+ border:1px solid #677f93;
+}
+
+/*---------------------------------
+関連記事の記事を読むを右に
+--------------------------------*/
+.related-entry-read {
+  text-align: right;
+  margin-right: 10px;
+}
+
+
+/*---------------------------------
+関連記事に点線
+--------------------------------*/
+#main .related-entry {
+    border-bottom: 1px dotted #4c6c83;
+    padding-bottom: 15px;
+}
+
+
+/************************************
+** サイドバー（Sidebar）・ウィジェットなど
+************************************/
+
+#sidebar h3{
+  text-align:center;
+  line-height: 28px;
+  font-size: 20px;
+  color: #fff;
+  background-color: #4c6c83;
+}
+
+
+/************************************
+** フッター(footer)
+************************************/
+
+#footer {
+  background-color: #4c6c83;
+}
+
+
+/************************************
+** TOPへ戻るボタン（Go to top）
+************************************/
+
+#page-top a {
+  border: 5px solid #4c6c83;
+  background-color: #fff;
+  color: #4c6c83;
+}
+
+
+/************************************
+** モバイルメニュー
+************************************/
+ 
+#mobile-menu a {
+  color: #4c6c83;
+}
+
+
+/************************************
+** レスポンシブページネーション
+************************************/
+
+.pagination a {
+  border: none;
+}
+
+.pagination li.current a {
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+  background-color: #757575;
+  color: #fff;
+}
+
+.pagination > li:first-child > a {
+  font-weight: bold;
+}
+
+.pagination > li:last-child > a {
+  font-weight: bold;
+}

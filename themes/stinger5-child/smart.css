@@ -1,0 +1,84 @@
+/*
+Theme Name: stinger5-child
+Template: stinger5ver20141011
+*/
+@import url('../stinger5ver20141011/style.css');
+
+/* モバイル版アドセンス用 調整 */
+.mb_adsense{
+	margin-left:-10px;
+}
+ /*小見出し*/
+.post h3 {
+	font-size: 20px;
+	margin-bottom: 20px;
+	margin-top: 10px;
+	padding-top: 15px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 45px;
+	color: #1a1a1a;
+	line-height: 27px;
+	background-image: url(images/cah3.png);
+	background-repeat: no-repeat;
+	background-position: left center;
+	margin-left: 0px;
+	border-bottom: 1px #999999 dotted;
+}
+
+/*-----------------------------
+Hatebu
+------------------------------*/
+img.hatebuCount {
+	vertical-align: middle;
+}
+/*-----------------------------
+   購読者数つきFeedlyボタン 
+------------------------------*/
+#feedly-followers {
+    display: block;
+}
+/* 購読者数の表示部分 */
+#feedly-count {
+    margin-bottom: 6px;
+    width: 62px;  ←カウンタの幅
+    height: 31px;  ←カウンタの高さ
+    background-color: #FFF;
+    position: relative;
+    border: 1px solid #669966;
+    border-radius: 4px;
+    padding: 0 4px;
+    font-family: Arial;
+    font-size: 16px;
+    line-height: 31px;
+    text-align: center;
+    display: block;
+  background: white;
+}
+/* 購読者数吹き出し部分 */
+.fdly-count:after,
+.fdly-count:before {
+    border: solid transparent;
+    content: ' ';
+    right: 43%;
+    position: absolute;
+}
+.fdly-count:before {
+    border-width: 5px;
+    border-top-color: #B0C1D8;
+    top: 32px;
+}
+.fdly-count:after {
+    border-width: 5px;
+    border-top-color: #FFF;
+    top: 30px;
+}
+/*-----------------------------
+SNS
+------------------------------*/
+/* SNSボタン間の隙間を調整 */
+.snsb li {
+	float: left;
+	margin-right: 5px;
+	list-style-type: none;
+}
