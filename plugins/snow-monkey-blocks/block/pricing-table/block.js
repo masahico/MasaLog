@@ -1,8 +1,11 @@
 'use strict';
 
+import generateUpdatedAttribute from '../../src/js/helper/generate-updated-attribute';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 const { get, times } = lodash;
 const { registerBlockType } = wp.blocks;
-const { RichText, InspectorControls, ColorPalette } = wp.editor;
+const { RichText, InspectorControls, ColorPalette, MediaPlaceholder } = wp.editor;
 const { PanelBody, RangeControl, SelectControl, TextControl, BaseControl } = wp.components;
 const { Fragment } = wp.element;
 const { __, sprintf } = wp.i18n;
@@ -19,34 +22,24 @@ registerBlockType( 'snow-monkey-blocks/pricing-table', {
 			default: [],
 			query: {
 				title: {
-					type: 'array',
-					source: 'children',
+					source: 'html',
 					selector: '.smb-pricing-table__item__title',
-					default: [],
 				},
 				price: {
-					type: 'array',
-					source: 'children',
+					source: 'html',
 					selector: '.smb-pricing-table__item__price',
-					default: [],
 				},
 				lede: {
-					type: 'array',
-					source: 'children',
+					source: 'html',
 					selector: '.smb-pricing-table__item__lede',
-					default: [],
 				},
 				list: {
-					type: 'array',
-					source: 'children',
+					source: 'html',
 					selector: 'ul',
-					default: [],
 				},
 				btnLabel: {
-					type: 'array',
-					source: 'children',
+					source: 'html',
 					selector: '.smb-pricing-table__item__btn > .smb-btn__label',
-					default: [],
 				},
 				btnURL: {
 					type: 'string',
@@ -76,6 +69,20 @@ registerBlockType( 'snow-monkey-blocks/pricing-table', {
 					attribute: 'data-color',
 					default: null,
 				},
+				imageID: {
+					type: 'number',
+					source: 'attribute',
+					selector: '.smb-pricing-table__item__figure > img',
+					attribute: 'data-image-id',
+					default: 0,
+				},
+				imageURL: {
+					type: 'string',
+					source: 'attribute',
+					selector: '.smb-pricing-table__item__figure > img',
+					attribute: 'src',
+					default: '',
+				},
 			},
 		},
 		columns: {
@@ -86,13 +93,6 @@ registerBlockType( 'snow-monkey-blocks/pricing-table', {
 
 	edit( { attributes, setAttributes, isSelected } ) {
 		const { content, columns } = attributes;
-
-		const generateUpdatedAttribute = ( parent, index, attribute, value ) => {
-			const newParent = [ ...parent ];
-			newParent[ index ] = get( newParent, index, {} );
-			newParent[ index ][ attribute ] = value;
-			return newParent;
-		};
 
 		return (
 			<Fragment>
@@ -161,41 +161,82 @@ registerBlockType( 'snow-monkey-blocks/pricing-table', {
 				<div className={ `smb-pricing-table smb-pricing-table--${ columns }` }>
 					<div className="smb-pricing-table__row">
 						{ times( columns, ( index ) => {
-							const title = get( content, [ index, 'title' ], [] );
-							const price = get( content, [ index, 'price' ], [] );
-							const lede = get( content, [ index, 'lede' ], [] );
-							const list = get( content, [ index, 'list' ], [] );
-							const btnLabel = get( content, [ index, 'btnLabel' ], [] );
+							const title = get( content, [ index, 'title' ], '' );
+							const price = get( content, [ index, 'price' ], '' );
+							const lede = get( content, [ index, 'lede' ], '' );
+							const list = get( content, [ index, 'list' ], '' );
+							const btnLabel = get( content, [ index, 'btnLabel' ], '' );
 							const btnURL = get( content, [ index, 'btnURL' ], '' );
 							const btnTarget = get( content, [ index, 'btnTarget' ], '_self' );
 							const btnBackgroundColor = get( content, [ index, 'btnBackgroundColor' ], '' );
 							const btnTextColor = get( content, [ index, 'btnTextColor' ], '' );
+							const imageID = get( content, [ index, 'imageID' ], 0 );
+							const imageURL = get( content, [ index, 'imageURL' ], '' );
+
+							const renderMedia = () => {
+								if ( ! imageURL ) {
+									return (
+										<MediaPlaceholder
+											icon="format-image"
+											labels={ { title: __( 'Image' ) } }
+											onSelect={ ( media ) => {
+												const newImageURL = !! media.sizes && !! media.sizes.large ? media.sizes.large.url : media.url;
+												let newContent = content;
+												newContent = generateUpdatedAttribute( newContent, index, 'imageURL', newImageURL );
+												newContent = generateUpdatedAttribute( newContent, index, 'imageID', media.id );
+												setAttributes( { content: newContent } );
+											} }
+											accept="image/*"
+											allowedTypes={ [ 'image' ] }
+										/>
+									);
+								}
+
+								return (
+									<Fragment>
+										<img src={ imageURL } alt="" />
+										<button
+											className="smb-remove-button"
+											onClick={ () => {
+												setAttributes( { content: generateUpdatedAttribute( content, index, 'imageURL', '' ) } );
+												setAttributes( { content: generateUpdatedAttribute( content, index, 'imageID', 0 ) } );
+											} }
+										>{ __( 'Remove', 'snow-monkey-blocks' ) }</button>
+									</Fragment>
+								);
+							};
 
 							return (
 								<div className="smb-pricing-table__col">
 									<div className="smb-pricing-table__item">
+										{ ( !! imageID || isSelected ) &&
+											<div className="smb-pricing-table__item__figure">
+												{ renderMedia() }
+											</div>
+										}
+
 										<RichText
 											className="smb-pricing-table__item__title"
-											placeholder={ __( 'Write title…', 'snow-monkey-blocks' ) }
+											placeholder={ __( 'Write title...', 'snow-monkey-blocks' ) }
 											value={ title }
 											formattingControls={ [] }
 											onChange={ ( value ) => setAttributes( { content: generateUpdatedAttribute( content, index, 'title', value ) } ) }
 										/>
 
-										{ ( price.length > 0 || isSelected ) &&
+										{ ( ! RichText.isEmpty( price ) || isSelected ) &&
 											<RichText
 												className="smb-pricing-table__item__price"
-												placeholder={ __( 'Write price…', 'snow-monkey-blocks' ) }
+												placeholder={ __( 'Write price...', 'snow-monkey-blocks' ) }
 												value={ price }
 												formattingControls={ [] }
 												onChange={ ( value ) => setAttributes( { content: generateUpdatedAttribute( content, index, 'price', value ) } ) }
 											/>
 										}
 
-										{ ( lede.length > 0 || isSelected ) &&
+										{ ( ! RichText.isEmpty( lede ) || isSelected ) &&
 											<RichText
 												className="smb-pricing-table__item__lede"
-												placeholder={ __( 'Write lede…', 'snow-monkey-blocks' ) }
+												placeholder={ __( 'Write lede...', 'snow-monkey-blocks' ) }
 												value={ lede }
 												formattingControls={ [] }
 												onChange={ ( value ) => setAttributes( { content: generateUpdatedAttribute( content, index, 'lede', value ) } ) }
@@ -209,7 +250,7 @@ registerBlockType( 'snow-monkey-blocks/pricing-table', {
 											onChange={ ( value ) => setAttributes( { content: generateUpdatedAttribute( content, index, 'list', value ) } ) }
 										/>
 
-										{ ( btnLabel.length > 0 || !! btnURL || isSelected ) &&
+										{ ( ! RichText.isEmpty( btnLabel ) || isSelected ) &&
 											<div className="smb-pricing-table__item__action">
 												<span className="smb-pricing-table__item__btn smb-btn"
 													href={ btnURL }
@@ -230,6 +271,20 @@ registerBlockType( 'snow-monkey-blocks/pricing-table', {
 											</div>
 										}
 									</div>
+
+									{ index + 1 === columns && isSelected &&
+										<div className="smb-add-item-button-wrapper">
+											{ columns > 1 &&
+												<button className="smb-remove-item-button" onClick={ () => setAttributes( { columns: columns - 1 } ) }>
+													<FontAwesomeIcon icon="minus-circle" />
+												</button>
+											}
+
+											<button className="smb-add-item-button" onClick={ () => setAttributes( { columns: columns + 1 } ) }>
+												<FontAwesomeIcon icon="plus-circle" />
+											</button>
+										</div>
+									}
 								</div>
 							);
 						} ) }
@@ -246,40 +301,48 @@ registerBlockType( 'snow-monkey-blocks/pricing-table', {
 			<div className={ `smb-pricing-table smb-pricing-table--${ columns }` }>
 				<div className="smb-pricing-table__row">
 					{ times( columns, ( index ) => {
-						const title = get( content, [ index, 'title' ], [] );
-						const price = get( content, [ index, 'price' ], [] );
-						const lede = get( content, [ index, 'lede' ], [] );
-						const list = get( content, [ index, 'list' ], [] );
-						const btnLabel = get( content, [ index, 'btnLabel' ], [] );
+						const title = get( content, [ index, 'title' ], '' );
+						const price = get( content, [ index, 'price' ], '' );
+						const lede = get( content, [ index, 'lede' ], '' );
+						const list = get( content, [ index, 'list' ], '' );
+						const btnLabel = get( content, [ index, 'btnLabel' ], '' );
 						const btnURL = get( content, [ index, 'btnURL' ], '' );
 						const btnTarget = get( content, [ index, 'btnTarget' ], '_self' );
 						const btnBackgroundColor = get( content, [ index, 'btnBackgroundColor' ], '' );
 						const btnTextColor = get( content, [ index, 'btnTextColor' ], '' );
+						const imageID = get( content, [ index, 'imageID' ], 0 );
+						const imageURL = get( content, [ index, 'imageURL' ], '' );
 
 						return (
 							<div className="smb-pricing-table__col">
 								<div className="smb-pricing-table__item">
-									<div className="smb-pricing-table__item__title">
-										{ title }
-									</div>
-
-									{ price.length > 0 &&
-										<div className="smb-pricing-table__item__price">
-											{ price }
+									{ !! imageID &&
+										<div className="smb-pricing-table__item__figure">
+											<img src={ imageURL } alt="" data-image-id={ imageID } />
 										</div>
 									}
 
-									{ lede.length > 0 &&
+									<div className="smb-pricing-table__item__title">
+										<RichText.Content value={ title } />
+									</div>
+
+									{ ! RichText.isEmpty( price ) &&
+										<div className="smb-pricing-table__item__price">
+											<RichText.Content value={ price } />
+										</div>
+									}
+
+									{ ! RichText.isEmpty( lede ) &&
 										<div className="smb-pricing-table__item__lede">
-											{ lede }
+											<RichText.Content value={ lede } />
 										</div>
 									}
 
 									<ul>
-										{ list }
+										<RichText.Content value={ list } />
 									</ul>
 
-									{ ( btnLabel.length > 0 || btnURL ) &&
+									{ ( ! RichText.isEmpty( btnLabel ) || !! btnURL ) &&
 										<div className="smb-pricing-table__item__action">
 											<a className="smb-pricing-table__item__btn smb-btn"
 												href={ btnURL }
@@ -289,7 +352,7 @@ registerBlockType( 'snow-monkey-blocks/pricing-table', {
 												data-color={ btnTextColor }
 											>
 												<span className="smb-btn__label" style={ { color: btnTextColor } }>
-													{ btnLabel }
+													<RichText.Content value={ btnLabel } />
 												</span>
 											</a>
 										</div>

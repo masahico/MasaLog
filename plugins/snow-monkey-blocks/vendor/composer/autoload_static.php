@@ -4,16 +4,12 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit84e7c084cefcd3826f4a4771f87007c8
+class ComposerStaticInite44fb02c9ec25a0b5aba4c9f4f934644
 {
     public static $prefixLengthsPsr4 = array (
         'S' => 
         array (
             'Snow_Monkey\\Plugin\\Blocks\\' => 26,
-        ),
-        'I' => 
-        array (
-            'Inc2734\\WP_GitHub_Plugin_Updater\\' => 33,
         ),
     );
 
@@ -22,28 +18,13 @@ class ComposerStaticInit84e7c084cefcd3826f4a4771f87007c8
         array (
             0 => __DIR__ . '/../..' . '/',
         ),
-        'Inc2734\\WP_GitHub_Plugin_Updater\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/inc2734/wp-github-plugin-updater/src',
-        ),
-    );
-
-    public static $prefixesPsr0 = array (
-        'P' => 
-        array (
-            'Parsedown' => 
-            array (
-                0 => __DIR__ . '/..' . '/erusev/parsedown',
-            ),
-        ),
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit84e7c084cefcd3826f4a4771f87007c8::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit84e7c084cefcd3826f4a4771f87007c8::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit84e7c084cefcd3826f4a4771f87007c8::$prefixesPsr0;
+            $loader->prefixLengthsPsr4 = ComposerStaticInite44fb02c9ec25a0b5aba4c9f4f934644::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInite44fb02c9ec25a0b5aba4c9f4f934644::$prefixDirsPsr4;
 
         }, null, ClassLoader::class);
     }

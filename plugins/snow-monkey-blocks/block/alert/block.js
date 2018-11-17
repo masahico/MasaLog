@@ -1,12 +1,16 @@
 'use strict';
 
 import classnames from 'classnames';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+const { times } = lodash;
 const { registerBlockType } = wp.blocks;
 const { RichText, InspectorControls } = wp.editor;
-const { PanelBody, SelectControl } = wp.components;
+const { PanelBody, SelectControl, BaseControl, Button } = wp.components;
 const { Fragment } = wp.element;
 const { __ } = wp.i18n;
+
+let isIconUpdated = false;
 
 registerBlockType( 'snow-monkey-blocks/alert', {
 	title: __( 'Alert', 'snow-monkey-blocks' ),
@@ -14,25 +18,60 @@ registerBlockType( 'snow-monkey-blocks/alert', {
 	category: 'smb',
 	attributes: {
 		title: {
-			type: 'array',
-			source: 'children',
+			source: 'html',
 			selector: '.smb-alert__title strong',
-			default: [],
 		},
 		content: {
-			type: 'array',
-			source: 'children',
+			source: 'html',
 			selector: '.smb-alert__body',
-			default: [],
 		},
 		modifier: {
 			type: 'string',
 			default: '',
 		},
+		icon: {
+			type: 'string',
+			default: 'exclamation-circle',
+		},
 	},
 
 	edit( { attributes, setAttributes, isSelected } ) {
-		const { title, content, modifier } = attributes;
+		const { title, content, modifier, icon } = attributes;
+
+		const iconList = [
+			{
+				value: 'exclamation-circle',
+				label: __( 'exclamation-circle', 'snow-monkey-blocks' ),
+			},
+			{
+				value: 'check',
+				label: __( 'check', 'snow-monkey-blocks' ),
+			},
+			{
+				value: 'check-circle',
+				label: __( 'check-circle', 'snow-monkey-blocks' ),
+			},
+			{
+				value: 'check-square',
+				label: __( 'check-square', 'snow-monkey-blocks' ),
+			},
+			{
+				value: 'hand-point-right',
+				label: __( 'hand-point-right', 'snow-monkey-blocks' ),
+			},
+		];
+
+		const renderFontAwesomeIcon = () => {
+			const displayDefaultIcon = isIconUpdated ? 'none' : 'block';
+			return (
+				<Fragment>
+					<div style={ { display: displayDefaultIcon } }>
+						<i className={ `fas fa-${ icon }` } />
+					</div>
+					<FontAwesomeIcon icon={ icon } />
+				</Fragment>
+			);
+		};
 
 		return (
 			<Fragment>
@@ -57,17 +96,36 @@ registerBlockType( 'snow-monkey-blocks/alert', {
 								},
 							] }
 						/>
+
+						<BaseControl label={ __( 'Icon', 'snow-monkey-blocks' ) }>
+							<div className="smb-list-icon-selector">
+								{ times( iconList.length, ( index ) => {
+									return (
+										<Button
+											isDefault
+											isPrimary={ icon === iconList[ index ].value }
+											onClick={ () => {
+												isIconUpdated = true;
+												setAttributes( { icon: iconList[ index ].value } );
+											} }
+										>
+											<i className={ `fas fa-${ iconList[ index ].value }` } title={ iconList[ index ].label } />
+										</Button>
+									);
+								} ) }
+							</div>
+						</BaseControl>
 					</PanelBody>
 				</InspectorControls>
 				<div className={ classnames( 'smb-alert', { [ `smb-alert--${ modifier }` ]: !! modifier } ) }>
-					{ ( 0 < title.length || isSelected ) &&
+					{ ( ! RichText.isEmpty( title ) || isSelected ) &&
 						<div className="smb-alert__title">
-							<i className="fas fa-exclamation-circle" />
+							{ renderFontAwesomeIcon() }
 							<strong>
 								<RichText
 									multiline={ false }
 									value={ title }
-									placeholder={ __( 'Write title…', 'snow-monkey-blocks' ) }
+									placeholder={ __( 'Write title...', 'snow-monkey-blocks' ) }
 									onChange={ ( value ) => setAttributes( { title: value } ) }
 								/>
 							</strong>
@@ -86,21 +144,21 @@ registerBlockType( 'snow-monkey-blocks/alert', {
 	},
 
 	save( { attributes } ) {
-		const { title, content, modifier } = attributes;
+		const { title, content, modifier, icon } = attributes;
 
 		return (
 			<div className={ classnames( 'smb-alert', { [ `smb-alert--${ modifier }` ]: !! modifier } ) }>
-				{ 0 < title.length &&
+				{ ! RichText.isEmpty( title ) &&
 					<div className="smb-alert__title">
-						<i className="fas fa-exclamation-circle" />
+						<i className={ `fas fa-${ icon }` } />
 						<strong>
-							{ title }
+							<RichText.Content value={ title } />
 						</strong>
 					</div>
 				}
 
 				<div className="smb-alert__body">
-					{ content }
+					<RichText.Content value={ content } />
 				</div>
 			</div>
 		);

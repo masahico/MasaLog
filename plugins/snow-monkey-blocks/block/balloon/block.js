@@ -29,10 +29,8 @@ registerBlockType( 'snow-monkey-blocks/balloon', {
 			default: '',
 		},
 		balloonBody: {
-			type: 'array',
-			source: 'children',
+			source: 'html',
 			selector: '.smb-balloon__body',
-			default: [],
 		},
 		modifier: {
 			type: 'string',
@@ -76,7 +74,10 @@ registerBlockType( 'snow-monkey-blocks/balloon', {
 					<div className="smb-balloon__person">
 						<div className="smb-balloon__figure">
 							<MediaUpload
-								onSelect={ ( media ) => setAttributes( { avatarURL: media.sizes.thumbnail.url, avatarID: media.id } ) }
+								onSelect={ ( media ) => {
+									const newAvatarURL = !! media.sizes.thumbnail ? media.sizes.thumbnail.url : media.url;
+									setAttributes( { avatarURL: newAvatarURL, avatarID: media.id } );
+								} }
 								type="image"
 								value={ avatarID }
 								render={ renderAvatar }
@@ -117,7 +118,7 @@ registerBlockType( 'snow-monkey-blocks/balloon', {
 					</div>
 				</div>
 				<div className="smb-balloon__body">
-					{ balloonBody }
+					<RichText.Content value={ balloonBody } />
 				</div>
 			</div>
 		);

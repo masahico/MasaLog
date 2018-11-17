@@ -1,5 +1,8 @@
 'use strict';
 
+import generateUpdatedAttribute from '../../src/js/helper/generate-updated-attribute';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 const { times, get } = lodash;
 const { registerBlockType } = wp.blocks;
 const { RichText, MediaUpload, InspectorControls } = wp.editor;
@@ -33,22 +36,16 @@ registerBlockType( 'snow-monkey-blocks/testimonial', {
 					default: 'https://0.gravatar.com/avatar/00000000000000000000000000000000?s=128&d=mp&r=g',
 				},
 				name: {
-					type: 'array',
-					source: 'children',
+					source: 'html',
 					selector: '.smb-testimonial__item__name',
-					default: [],
 				},
 				lede: {
-					type: 'array',
-					source: 'children',
+					source: 'html',
 					selector: '.smb-testimonial__item__lede',
-					default: [],
 				},
 				content: {
-					type: 'array',
-					source: 'children',
+					source: 'html',
 					selector: '.smb-testimonial__item__content',
-					default: [],
 				},
 			},
 		},
@@ -60,16 +57,6 @@ registerBlockType( 'snow-monkey-blocks/testimonial', {
 
 	edit( { attributes, setAttributes, isSelected } ) {
 		const { items, columns } = attributes;
-
-		const generateUpdatedAttribute = ( parent, index, attribute, value ) => {
-			const newParent = [ ...parent ];
-			newParent[ index ] = get( newParent, index, {} );
-			if ( null === newParent[ index ] ) {
-				newParent[ index ] = {};
-			}
-			newParent[ index ][ attribute ] = value;
-			return newParent;
-		};
 
 		return (
 			<Fragment>
@@ -122,30 +109,45 @@ registerBlockType( 'snow-monkey-blocks/testimonial', {
 											}
 
 											<div className="smb-testimonial__item__body">
-												<RichText
-													className="smb-testimonial__item__content"
-													placeholder={ __( 'Write content…', 'snow-monkey-blocks' ) }
-													value={ content }
-													onChange={ ( value ) => setAttributes( { items: generateUpdatedAttribute( items, index, 'content', value ) } ) }
-												/>
+												<div className="smb-testimonial__item__content">
+													<RichText
+														placeholder={ __( 'Write content...', 'snow-monkey-blocks' ) }
+														value={ content }
+														onChange={ ( value ) => setAttributes( { items: generateUpdatedAttribute( items, index, 'content', value ) } ) }
+													/>
+												</div>
 
 												<RichText
 													className="smb-testimonial__item__name"
-													placeholder={ __( 'Write name…', 'snow-monkey-blocks' ) }
+													placeholder={ __( 'Write name...', 'snow-monkey-blocks' ) }
 													value={ name }
 													onChange={ ( value ) => setAttributes( { items: generateUpdatedAttribute( items, index, 'name', value ) } ) }
 												/>
 
-												{ ( lede.length > 0 || isSelected ) &&
+												{ ( ! RichText.isEmpty( lede ) || isSelected ) &&
 													<RichText
 														className="smb-testimonial__item__lede"
-														placeholder={ __( 'Write lede…', 'snow-monkey-blocks' ) }
+														placeholder={ __( 'Write lede...', 'snow-monkey-blocks' ) }
 														value={ lede }
 														onChange={ ( value ) => setAttributes( { items: generateUpdatedAttribute( items, index, 'lede', value ) } ) }
 													/>
 												}
 											</div>
 										</div>
+
+										{ index + 1 === columns && isSelected &&
+											<div className="smb-add-item-button-wrapper">
+												{ columns > 1 &&
+													<button className="smb-remove-item-button" onClick={ () => setAttributes( { columns: columns - 1 } ) }>
+														<FontAwesomeIcon icon="minus-circle" />
+													</button>
+												}
+
+												<button className="smb-add-item-button" onClick={ () => setAttributes( { columns: columns + 1 } ) }>
+													<FontAwesomeIcon icon="plus-circle" />
+												</button>
+											</div>
+										}
 									</div>
 								);
 							} ) }
@@ -178,14 +180,16 @@ registerBlockType( 'snow-monkey-blocks/testimonial', {
 										</div>
 										<div className="smb-testimonial__item__body">
 											<div className="smb-testimonial__item__content">
-												{ content }
+												<RichText.Content value={ content } />
 											</div>
 											<div className="smb-testimonial__item__name">
-												{ name }
+												<RichText.Content value={ name } />
 											</div>
-											<div className="smb-testimonial__item__lede">
-												{ lede }
-											</div>
+											{ ! RichText.isEmpty( lede ) &&
+												<div className="smb-testimonial__item__lede">
+													<RichText.Content value={ lede } />
+												</div>
+											}
 										</div>
 									</div>
 								</div>

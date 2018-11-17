@@ -1,11 +1,12 @@
 'use strict';
 
-import classnames from 'classnames';
+import generateUpdatedAttribute from '../../src/js/helper/generate-updated-attribute';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const { get, times } = lodash;
 const { registerBlockType } = wp.blocks;
-const { RichText, InspectorControls, ColorPalette, MediaUpload } = wp.editor;
-const { PanelBody, RangeControl, SelectControl, TextControl, BaseControl, Button } = wp.components;
+const { RichText, InspectorControls, ColorPalette, MediaPlaceholder } = wp.editor;
+const { PanelBody, RangeControl, SelectControl, TextControl, BaseControl } = wp.components;
 const { Fragment } = wp.element;
 const { __, sprintf } = wp.i18n;
 
@@ -21,16 +22,12 @@ registerBlockType( 'snow-monkey-blocks/step', {
 			default: [],
 			query: {
 				title: {
-					type: 'array',
-					source: 'children',
+					source: 'html',
 					selector: '.smb-step__item__title > span',
-					default: [],
 				},
 				summary: {
-					type: 'array',
-					source: 'children',
+					source: 'html',
 					selector: '.smb-step__item__summary',
-					default: [],
 				},
 				numberColor: {
 					type: 'string',
@@ -43,7 +40,7 @@ registerBlockType( 'snow-monkey-blocks/step', {
 					type: 'string',
 					source: 'attribute',
 					attribute: 'data-image-position',
-					default: 'left',
+					default: 'center',
 				},
 				imageID: {
 					type: 'number',
@@ -57,13 +54,11 @@ registerBlockType( 'snow-monkey-blocks/step', {
 					source: 'attribute',
 					selector: '.smb-step__item__figure > img',
 					attribute: 'src',
-					default: smb.pluginURL + 'block/step/image.png',
+					default: '',
 				},
 				linkLabel: {
-					type: 'array',
-					source: 'children',
+					source: 'html',
 					selector: '.smb-step__item__link__label',
-					default: [],
 				},
 				linkURL: {
 					type: 'string',
@@ -90,13 +85,6 @@ registerBlockType( 'snow-monkey-blocks/step', {
 	edit( { attributes, setAttributes, isSelected } ) {
 		const { rows, content } = attributes;
 
-		const generateUpdatedAttribute = ( parent, index, attribute, value ) => {
-			const newParent = [ ...parent ];
-			newParent[ index ] = get( newParent, index, {} );
-			newParent[ index ][ attribute ] = value;
-			return newParent;
-		};
-
 		return (
 			<Fragment>
 				<InspectorControls>
@@ -112,7 +100,7 @@ registerBlockType( 'snow-monkey-blocks/step', {
 
 					{ times( rows, ( index ) => {
 						const numberColor = get( content, [ index, 'numberColor' ], null );
-						const imagePosition = get( content, [ index, 'imagePosition' ], 'left' );
+						const imagePosition = get( content, [ index, 'imagePosition' ], 'center' );
 						const linkURL = get( content, [ index, 'linkURL' ], '' );
 						const linkTarget = get( content, [ index, 'linkTarget' ], '_self' );
 
@@ -177,33 +165,58 @@ registerBlockType( 'snow-monkey-blocks/step', {
 				<div className="smb-step">
 					<div className="smb-step__body">
 						{ times( rows, ( index ) => {
-							const title = get( content, [ index, 'title' ], [] );
-							const summary = get( content, [ index, 'summary' ], [] );
+							const title = get( content, [ index, 'title' ], '' );
+							const summary = get( content, [ index, 'summary' ], '' );
 							const numberColor = get( content, [ index, 'numberColor' ], null );
-							const imagePosition = get( content, [ index, 'imagePosition' ], 'left' );
+							const imagePosition = get( content, [ index, 'imagePosition' ], 'center' );
 							const imageID = get( content, [ index, 'imageID' ], 0 );
-							const imageURL = get( content, [ index, 'imageURL' ], smb.pluginURL + 'block/step/image.png' );
+							const imageURL = get( content, [ index, 'imageURL' ], '' );
 							const linkURL = get( content, [ index, 'linkURL' ], '' );
 							const linkTarget = get( content, [ index, 'linkTarget' ], '_self' );
-							const linkLabel = get( content, [ index, 'linkLabel' ], [] );
+							const linkLabel = get( content, [ index, 'linkLabel' ], '' );
 
-							const renderImage = ( obj ) => {
+							const renderMedia = () => {
+								if ( ! imageURL ) {
+									return (
+										<MediaPlaceholder
+											icon="format-image"
+											labels={ { title: __( 'Image' ) } }
+											onSelect={ ( media ) => {
+												const newImageURL = !! media.sizes && !! media.sizes.large ? media.sizes.large.url : media.url;
+												let newContent = content;
+												newContent = generateUpdatedAttribute( newContent, index, 'imageURL', newImageURL );
+												newContent = generateUpdatedAttribute( newContent, index, 'imageID', media.id );
+												setAttributes( { content: newContent } );
+											} }
+											accept="image/*"
+											allowedTypes={ [ 'image' ] }
+										/>
+									);
+								}
+
 								return (
-									<Button className="image-button" onClick={ obj.open } style={ { padding: 0 } }>
+									<Fragment>
 										<img src={ imageURL } alt="" />
-									</Button>
+										<button
+											className="smb-remove-button"
+											onClick={ () => {
+												setAttributes( { content: generateUpdatedAttribute( content, index, 'imageURL', '' ) } );
+												setAttributes( { content: generateUpdatedAttribute( content, index, 'imageID', 0 ) } );
+											} }
+										>{ __( 'Remove', 'snow-monkey-blocks' ) }</button>
+									</Fragment>
 								);
 							};
 
 							return (
-								<div className={ classnames( 'smb-step__item', { [ `smb-step__item--image-${ imagePosition }` ]: !! imageID } ) } data-image-position={ imagePosition }>
+								<div className={ `smb-step__item smb-step__item--image-${ imagePosition }` } data-image-position={ imagePosition }>
 									<div className="smb-step__item__title">
 										<div className="smb-step__item__number" data-number-color={ numberColor } style={ { backgroundColor: numberColor } }>
 											{ index + 1 }
 										</div>
 										<span>
 											<RichText
-												placeholder={ __( 'Write title…', 'snow-monkey-blocks' ) }
+												placeholder={ __( 'Write title...', 'snow-monkey-blocks' ) }
 												value={ title }
 												formattingControls={ [] }
 												multiline={ false }
@@ -214,29 +227,20 @@ registerBlockType( 'snow-monkey-blocks/step', {
 
 									{ ( !! imageID || isSelected ) &&
 										<div className="smb-step__item__figure">
-											<MediaUpload
-												onSelect={ ( media ) => {
-													const newImageURL = !! media.sizes.large ? media.sizes.large.url : media.url;
-													setAttributes( { content: generateUpdatedAttribute( content, index, 'imageURL', newImageURL ) } );
-													setAttributes( { content: generateUpdatedAttribute( content, index, 'imageID', media.id ) } );
-												} }
-												type="image"
-												value={ imageID }
-												render={ renderImage }
-											/>
+											{ renderMedia() }
 										</div>
 									}
 
 									<div className="smb-step__item__body">
 										<RichText
 											className="smb-step__item__summary"
-											placeholder={ __( 'Write content…', 'snow-monkey-blocks' ) }
+											placeholder={ __( 'Write content...', 'snow-monkey-blocks' ) }
 											value={ summary }
 											multiline="p"
 											onChange={ ( value ) => setAttributes( { content: generateUpdatedAttribute( content, index, 'summary', value ) } ) }
 										/>
 
-										{ ( ( linkLabel.length > 0 && !! linkURL ) || isSelected ) &&
+										{ ( ! RichText.isEmpty( linkLabel ) || isSelected ) &&
 											<span className="smb-step__item__link" href={ linkURL } target={ linkTarget }>
 												<i className="fas fa-arrow-circle-right" />
 												<RichText
@@ -254,6 +258,20 @@ registerBlockType( 'snow-monkey-blocks/step', {
 							);
 						} ) }
 					</div>
+
+					{ isSelected &&
+						<div className="smb-add-item-button-wrapper">
+							{ rows > 1 &&
+								<button className="smb-remove-item-button" onClick={ () => setAttributes( { rows: rows - 1 } ) }>
+									<FontAwesomeIcon icon="minus-circle" />
+								</button>
+							}
+
+							<button className="smb-add-item-button" onClick={ () => setAttributes( { rows: rows + 1 } ) }>
+								<FontAwesomeIcon icon="plus-circle" />
+							</button>
+						</div>
+					}
 				</div>
 			</Fragment>
 		);
@@ -266,24 +284,24 @@ registerBlockType( 'snow-monkey-blocks/step', {
 			<div className="smb-step">
 				<div className="smb-step__body">
 					{ times( rows, ( index ) => {
-						const title = get( content, [ index, 'title' ], [] );
-						const summary = get( content, [ index, 'summary' ], [] );
+						const title = get( content, [ index, 'title' ], '' );
+						const summary = get( content, [ index, 'summary' ], '' );
 						const numberColor = get( content, [ index, 'numberColor' ], null );
 						const imagePosition = get( content, [ index, 'imagePosition' ], 'left' );
 						const imageID = get( content, [ index, 'imageID' ], 0 );
-						const imageURL = get( content, [ index, 'imageURL' ], smb.pluginURL + 'block/step/image.png' );
+						const imageURL = get( content, [ index, 'imageURL' ], '' );
 						const linkURL = get( content, [ index, 'linkURL' ], '' );
 						const linkTarget = get( content, [ index, 'linkTarget' ], '_self' );
-						const linkLabel = get( content, [ index, 'linkLabel' ], [] );
+						const linkLabel = get( content, [ index, 'linkLabel' ], '' );
 
 						return (
-							<div className={ classnames( 'smb-step__item', { [ `smb-step__item--image-${ imagePosition }` ]: !! imageID } ) } data-image-position={ imagePosition }>
+							<div className={ `smb-step__item smb-step__item--image-${ imagePosition }` } data-image-position={ imagePosition }>
 								<div className="smb-step__item__title">
 									<div className="smb-step__item__number" data-number-color={ numberColor } style={ { backgroundColor: numberColor } }>
 										{ index + 1 }
 									</div>
 									<span>
-										{ title }
+										<RichText.Content value={ title } />
 									</span>
 								</div>
 
@@ -295,14 +313,14 @@ registerBlockType( 'snow-monkey-blocks/step', {
 
 								<div className="smb-step__item__body">
 									<div className="smb-step__item__summary">
-										{ summary }
+										<RichText.Content value={ summary } />
 									</div>
 
-									{ linkLabel.length > 0 && !! linkURL &&
+									{ ! RichText.isEmpty( linkLabel ) && !! linkURL &&
 										<a className="smb-step__item__link" href={ linkURL } target={ linkTarget }>
 											<i className="fas fa-arrow-circle-right" />
 											<span className="smb-step__item__link__label">
-												{ linkLabel }
+												<RichText.Content value={ linkLabel } />
 											</span>
 										</a>
 									}

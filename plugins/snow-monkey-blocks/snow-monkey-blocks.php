@@ -1,9 +1,12 @@
 <?php
 /**
  * Plugin name: Snow Monkey Blocks
- * Version: 1.0.0
- * Text Domain: snow-monkey-blocks
- * Domain Path: /languages/
+ * Version: 1.6.0
+ * Description: Gutenberg blocks collection made by MonkeyWrench.
+ * Author: inc2734
+ * Author URI: https://2inc.org
+ * License: GPL2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  *
  * @package snow-monkey-blocks
  * @author inc2734
@@ -19,13 +22,16 @@ class Bootstrap {
 	}
 
 	public function _bootstrap() {
-		load_plugin_textdomain( 'snow-monkey-blocks', false, basename( __DIR__ ) . '/languages' );
+		if ( ! function_exists( 'is_gutenberg_page' ) ) {
+			return;
+		}
+
+		new App\Setup\TextDomain();
+		new App\Setup\Assets();
 
 		add_filter( 'block_categories', [ $this, '_block_categories' ] );
-		add_action( 'enqueue_block_editor_assets', [ $this, '_enqueue_block_editor_assets' ] );
-		add_action( 'wp_enqueue_scripts', [ $this, '_wp_enqueue_scripts' ] );
-		add_action( 'init', [ $this, '_activate_autoupdate' ] );
-		add_action( 'wp_loaded', [ $this, '_customizer_styles' ] );
+		add_action( 'add_meta_boxes', [ $this, '_add_pr_meta_box' ] );
+		add_action( 'the_content', [ $this, '_the_content_for_slider' ], 11 );
 	}
 
 	/**
@@ -38,11 +44,13 @@ class Bootstrap {
 		$categories[] = [
 			'slug'  => 'smb',
 			'title' => __( 'Snow Monkey Blocks', 'snow-monkey-blocks' )
+								. ' '
 								. __( '[Common blocks]', 'snow-monkey-blocks' ),
 		];
 		$categories[] = [
 			'slug'  => 'smb-section',
 			'title' => __( 'Snow Monkey Blocks', 'snow-monkey-blocks' )
+								. ' '
 								. __( '[Sections]', 'snow-monkey-blocks' ),
 		];
 
@@ -50,96 +58,101 @@ class Bootstrap {
 	}
 
 	/**
-	 * Enqueue block script for editor
+	 * Add meta box for the Snow Monkey PR when the Gutenberg page or not using the Snow Monkey
 	 *
+	 * @param string $post_type
 	 * @return void
 	 */
-	public function _enqueue_block_editor_assets() {
-		$relative_path = '/dist/js/blocks-build.js';
-		$src  = plugin_dir_url( __FILE__ ) . $relative_path;
-		$path = plugin_dir_path( __FILE__ ) . $relative_path;
-
-		wp_register_script(
-			'snow-monkey-blocks-editor-script',
-			$src,
-			[ 'wp-blocks', 'wp-element', 'wp-i18n' ],
-			filemtime( $path ),
-			true
-		);
-
-		if ( function_exists( 'gutenberg_get_jed_locale_data' ) ) {
-			$locale  = gutenberg_get_jed_locale_data( 'snow-monkey-blocks' );
-			$content = 'wp.i18n.setLocaleData( ' . json_encode( $locale ) . ', "snow-monkey-blocks" );';
-			wp_script_add_data( 'snow-monkey-blocks-editor-script', 'data', $content );
-		}
-
-		wp_enqueue_script( 'snow-monkey-blocks-editor-script' );
-
-		wp_localize_script(
-			'snow-monkey-blocks-editor-script',
-			'smb',
-			[
-				'pluginURL' => plugin_dir_url( __FILE__ ),
-				'pluginDir' => plugin_dir_path( __FILE__ ),
-			]
-		);
-
-		$relative_path = '/dist/css/blocks-editor.min.css';
-		$src  = plugin_dir_url( __FILE__ ) . $relative_path;
-		$path = plugin_dir_path( __FILE__ ) . $relative_path;
-
-		wp_enqueue_style(
-			'snow-monkey-blocks-editor-style',
-			$src,
-			[],
-			filemtime( $path )
-		);
-	}
-
-	/**
-	 * Enqueue assets for front
-	 *
-	 * @return void
-	 */
-	public function _wp_enqueue_scripts() {
-		$relative_path = '/dist/css/blocks.min.css';
-		$src  = plugin_dir_url( __FILE__ ) . $relative_path;
-		$path = plugin_dir_path( __FILE__ ) . $relative_path;
-
-		wp_enqueue_style(
-			'snow-monkey-blocks',
-			$src,
-			[],
-			filemtime( $path )
-		);
-	}
-
-	/**
-	 * Apply styles from customizer settings of Snow Monkey
-	 *
-	 * @return void
-	 */
-	public function _customizer_styles() {
-		if ( 'snow-monkey' !== get_template() && 'snow-monkey/resources' !== get_template() ) {
+	public function _add_pr_meta_box( $post_type ) {
+		if ( ! is_gutenberg_page() || is_snow_monkey() ) {
 			return;
 		}
 
-		\Inc2734\Mimizuku_Core\Core::include_files( __DIR__ . '/block/' );
+		add_meta_box(
+			'snow-monkey-pr',
+			__( '[ PR ] Premium WordPress Theme Snow Monkey' ),
+			[ $this, '_pr_meta_box_html' ],
+			$post_type,
+			'normal'
+		);
 	}
 
 	/**
-	 * Activate auto update using GitHub
+	 * Display Snow Monkey PR meta box html
 	 *
-	 * @return [void]
+	 * @return void
 	 */
-	public function _activate_autoupdate() {
-		new \Inc2734\WP_GitHub_Plugin_Updater\GitHub_Plugin_Updater(
-			plugin_basename( __FILE__ ),
-			'inc2734',
-			'snow-monkey-blocks'
+	public function _pr_meta_box_html() {
+		?>
+		<p>
+			<?php
+			echo sprintf(
+				esc_html__( 'Snow Monkey Blocks is optimized for the %1$sSnow Monkey%2$s theme, but it can also be used with other themes.', 'snow-monkey-blocks' ),
+				'<a href="https://snow-monkey.2inc.org/" target="_blank">',
+				'</a>'
+			);
+			echo sprintf(
+				esc_html__( 'When used together with the %1$sSnow Monkey%2$s theme, it can be displayed with the most beautiful balance, and it is displayed on the edit screen with the same design as the front screen.', 'snow-monkey-blocks' ),
+				'<a href="https://snow-monkey.2inc.org/" target="_blank">',
+				'</a>'
+			);
+			?>
+		</p>
+		<?php
+	}
+
+	/**
+	 * Because the data attribute is destroyed by the influence of wptexturize, it corrects it
+	 *
+	 * @param string $content
+	 * @return string
+	 */
+	public function _the_content_for_slider( $content ) {
+		$content = preg_replace_callback(
+			'|data-slick="\{([^}]+?)\}"|',
+			function( $matches ) {
+				$matches[0] = str_replace( '"', '\'', $matches[0] );
+				$matches[0] = str_replace( '&quot;', '"', $matches[0] );
+				return $matches[0];
+			},
+			$content
 		);
+		return $content;
 	}
 }
 
 require_once( __DIR__ . '/vendor/autoload.php' );
+
 new \Snow_Monkey\Plugin\Blocks\Bootstrap();
+
+/**
+ * Directory url of this plugin
+ *
+ * @var string
+ */
+define( 'SNOW_MONKEY_BLOCKS_DIR_URL', plugin_dir_url( __FILE__ ) );
+
+/**
+ * Directory path of this plugin
+ *
+ * @var string
+ */
+define( 'SNOW_MONKEY_BLOCKS_DIR_PATH', plugin_dir_path( __FILE__ ) );
+
+/**
+ * Whether pro version
+ *
+ * @return boolean
+ */
+function is_pro() {
+	return apply_filters( 'snow_monkey_blocks_pro', false );
+}
+
+/**
+ * Return true when Snow Monkey is enabled
+ *
+ * @return boolean
+ */
+function is_snow_monkey() {
+	return 'snow-monkey' === get_template() || 'snow-monkey/resources' === get_template();
+}

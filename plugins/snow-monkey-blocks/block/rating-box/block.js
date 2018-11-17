@@ -1,5 +1,8 @@
 'use strict';
 
+import generateUpdatedAttribute from '../../src/js/helper/generate-updated-attribute';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 const { get, times } = lodash;
 const { registerBlockType } = wp.blocks;
 const { RichText, InspectorControls, ColorPalette } = wp.editor;
@@ -19,10 +22,8 @@ registerBlockType( 'snow-monkey-blocks/rating-box', {
 			default: [],
 			query: {
 				title: {
-					type: 'array',
-					source: 'children',
+					source: 'html',
 					selector: '.smb-rating-box__item__title',
-					default: [],
 				},
 				rating: {
 					type: 'number',
@@ -44,15 +45,8 @@ registerBlockType( 'snow-monkey-blocks/rating-box', {
 		},
 	},
 
-	edit( { attributes, setAttributes } ) {
+	edit( { attributes, setAttributes, isSelected } ) {
 		const { rows, ratings } = attributes;
-
-		const generateUpdatedAttribute = ( parent, index, attribute, value ) => {
-			const newParent = [ ...parent ];
-			newParent[ index ] = get( newParent, index, {} );
-			newParent[ index ][ attribute ] = value;
-			return newParent;
-		};
 
 		return (
 			<Fragment>
@@ -98,7 +92,7 @@ registerBlockType( 'snow-monkey-blocks/rating-box', {
 				<div className="smb-rating-box">
 					<div className="smb-rating-box__body">
 						{ times( rows, ( index ) => {
-							const itemTitle = get( ratings, [ index, 'title' ], [] );
+							const itemTitle = get( ratings, [ index, 'title' ], '' );
 							const rating = get( ratings, [ index, 'rating' ], 0 );
 							const color = get( ratings, [ index, 'color' ], '' );
 
@@ -106,7 +100,7 @@ registerBlockType( 'snow-monkey-blocks/rating-box', {
 								<div className="smb-rating-box__item" data-rating={ rating } data-color={ color }>
 									<RichText
 										className="smb-rating-box__item__title"
-										placeholder={ __( 'Write title…', 'snow-monkey-blocks' ) }
+										placeholder={ __( 'Write title...', 'snow-monkey-blocks' ) }
 										value={ itemTitle }
 										formattingControls={ [] }
 										multiline={ false }
@@ -125,6 +119,20 @@ registerBlockType( 'snow-monkey-blocks/rating-box', {
 							);
 						} ) }
 					</div>
+
+					{ isSelected &&
+						<div className="smb-add-item-button-wrapper">
+							{ rows > 1 &&
+								<button className="smb-remove-item-button" onClick={ () => setAttributes( { rows: rows - 1 } ) }>
+									<FontAwesomeIcon icon="minus-circle" />
+								</button>
+							}
+
+							<button className="smb-add-item-button" onClick={ () => setAttributes( { rows: rows + 1 } ) }>
+								<FontAwesomeIcon icon="plus-circle" />
+							</button>
+						</div>
+					}
 				</div>
 			</Fragment>
 		);
@@ -144,7 +152,7 @@ registerBlockType( 'snow-monkey-blocks/rating-box', {
 						return (
 							<div className="smb-rating-box__item" data-rating={ rating } data-color={ color }>
 								<div className="smb-rating-box__item__title" >
-									{ title }
+									<RichText.Content value={ title } />
 								</div>
 
 								<div className="smb-rating-box__item__evaluation">

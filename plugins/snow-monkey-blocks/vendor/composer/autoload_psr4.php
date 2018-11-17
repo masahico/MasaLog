@@ -7,5 +7,4 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Snow_Monkey\\Plugin\\Blocks\\' => array($baseDir . '/'),
-    'Inc2734\\WP_GitHub_Plugin_Updater\\' => array($vendorDir . '/inc2734/wp-github-plugin-updater/src'),
 );

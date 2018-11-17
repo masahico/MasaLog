@@ -1,5 +1,8 @@
 'use strict';
 
+import generateUpdatedAttribute from '../../src/js/helper/generate-updated-attribute';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 const { get, times } = lodash;
 const { registerBlockType } = wp.blocks;
 const { RichText, InspectorControls, ColorPalette } = wp.editor;
@@ -19,16 +22,12 @@ registerBlockType( 'snow-monkey-blocks/faq', {
 			default: [],
 			query: {
 				question: {
-					type: 'array',
-					source: 'children',
+					source: 'html',
 					selector: '.smb-faq__item__question__body',
-					default: [],
 				},
 				answer: {
-					type: 'array',
-					source: 'children',
+					source: 'html',
 					selector: '.smb-faq__item__answer__body',
-					default: [],
 				},
 				questionColor: {
 					type: 'string',
@@ -52,15 +51,8 @@ registerBlockType( 'snow-monkey-blocks/faq', {
 		},
 	},
 
-	edit( { attributes, setAttributes } ) {
+	edit( { attributes, setAttributes, isSelected } ) {
 		const { rows, content } = attributes;
-
-		const generateUpdatedAttribute = ( parent, index, attribute, value ) => {
-			const newParent = [ ...parent ];
-			newParent[ index ] = get( newParent, index, {} );
-			newParent[ index ][ attribute ] = value;
-			return newParent;
-		};
 
 		return (
 			<Fragment>
@@ -105,8 +97,8 @@ registerBlockType( 'snow-monkey-blocks/faq', {
 				<div className="smb-faq">
 					<div className="smb-faq__body">
 						{ times( rows, ( index ) => {
-							const question = get( content, [ index, 'question' ], [] );
-							const answer = get( content, [ index, 'answer' ], [] );
+							const question = get( content, [ index, 'question' ], '' );
+							const answer = get( content, [ index, 'answer' ], '' );
 							const questionColor = get( content, [ index, 'questionColor' ], '' );
 							const answerColor = get( content, [ index, 'answerColor' ], '' );
 
@@ -118,7 +110,7 @@ registerBlockType( 'snow-monkey-blocks/faq', {
 										</div>
 										<RichText
 											className="smb-faq__item__question__body"
-											placeholder={ __( 'Write question…', 'snow-monkey-blocks' ) }
+											placeholder={ __( 'Write question...', 'snow-monkey-blocks' ) }
 											value={ question }
 											formattingControls={ [] }
 											multiline={ false }
@@ -132,7 +124,7 @@ registerBlockType( 'snow-monkey-blocks/faq', {
 										</div>
 										<RichText
 											className="smb-faq__item__answer__body"
-											placeholder={ __( 'Write answer…', 'snow-monkey-blocks' ) }
+											placeholder={ __( 'Write answer...', 'snow-monkey-blocks' ) }
 											value={ answer }
 											multiline="p"
 											onChange={ ( value ) => setAttributes( { content: generateUpdatedAttribute( content, index, 'answer', value ) } ) }
@@ -142,6 +134,20 @@ registerBlockType( 'snow-monkey-blocks/faq', {
 							);
 						} ) }
 					</div>
+
+					{ isSelected &&
+						<div className="smb-add-item-button-wrapper">
+							{ rows > 1 &&
+								<button className="smb-remove-item-button" onClick={ () => setAttributes( { rows: rows - 1 } ) }>
+									<FontAwesomeIcon icon="minus-circle" />
+								</button>
+							}
+
+							<button className="smb-add-item-button" onClick={ () => setAttributes( { rows: rows + 1 } ) }>
+								<FontAwesomeIcon icon="plus-circle" />
+							</button>
+						</div>
+					}
 				</div>
 			</Fragment>
 		);
@@ -154,8 +160,8 @@ registerBlockType( 'snow-monkey-blocks/faq', {
 			<div className="smb-faq">
 				<div className="smb-faq__body">
 					{ times( rows, ( index ) => {
-						const question = get( content, [ index, 'question' ], [] );
-						const answer = get( content, [ index, 'answer' ], [] );
+						const question = get( content, [ index, 'question' ], '' );
+						const answer = get( content, [ index, 'answer' ], '' );
 						const questionColor = get( content, [ index, 'questionColor' ], '' );
 						const answerColor = get( content, [ index, 'answerColor' ], '' );
 
@@ -166,7 +172,7 @@ registerBlockType( 'snow-monkey-blocks/faq', {
 										Q
 									</div>
 									<div className="smb-faq__item__question__body">
-										{ question }
+										<RichText.Content value={ question } />
 									</div>
 								</div>
 
@@ -175,7 +181,7 @@ registerBlockType( 'snow-monkey-blocks/faq', {
 										A
 									</div>
 									<div className="smb-faq__item__answer__body">
-										{ answer }
+										<RichText.Content value={ answer } />
 									</div>
 								</div>
 							</div>
