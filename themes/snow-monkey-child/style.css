@@ -171,7 +171,7 @@ a.external-link:after {
 /*  font-family: 'FontAwesome'; */
     font-family: "Font Awesome 5 Free";
     font-weight: bold;
-	content: '\f35d';
+	content: ' \f35d';
 	font-size:0.9em;
 	margin:0 3px 0 2px;
 }
