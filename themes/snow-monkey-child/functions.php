@@ -165,26 +165,26 @@ function chagne_site_url_html_to_https_plus($the_content){
 add_filter('the_content', 'chagne_site_url_html_to_https_plus', 1);
 
 //CSS、JSファイルに編集時間をバージョンとして付加する（ファイル編集後のブラウザキャッシュ対策）
-add_filter( 'style_loader_src', 'add_file_ver_to_css_js_demo');
-add_filter( 'script_loader_src', 'add_file_ver_to_css_js_demo');
-if ( !function_exists( 'add_file_ver_to_css_js_demo' ) ):
-function add_file_ver_to_css_js_demo( $src ) {
+//add_filter( 'style_loader_src', 'add_file_ver_to_css_js_demo');
+//add_filter( 'script_loader_src', 'add_file_ver_to_css_js_demo');
+//if ( !function_exists( 'add_file_ver_to_css_js_demo' ) ):
+//function add_file_ver_to_css_js_demo( $src ) {
   //サーバー内のファイルの場合
-  if (strpos( $src, site_url() ) !== false) {
+//  if (strpos( $src, site_url() ) !== false) {
     // //Wordpressのバージョンを除去する場合
     // if ( strpos( $src, 'ver=' ) )
     //   $src = remove_query_arg( 'ver', $src );
  
     //クエリーを削除したファイルURLを取得
-    $removed_src = preg_replace('{\?.+$}i', '', $src);
+//    $removed_src = preg_replace('{\?.+$}i', '', $src);
     //URLをパスに変換
-    $resource_file = str_replace(site_url('/'), ABSPATH, $removed_src );
+//    $resource_file = str_replace(site_url('/'), ABSPATH, $removed_src );
     //ファイルの編集時間バージョンを追加
-    $src = add_query_arg( 'fver', date('Ymdhis', filemtime($resource_file)), $src );
-  }
-  return $src;
-}
-endif;
+//    $src = add_query_arg( 'fver', date('Ymdhis', filemtime($resource_file)), $src );
+//  }
+//  return $src;
+//}
+//endif;
 
 // 目次の上にリンクユニットを表示
 add_action( 'inc2734_wp_contents_outline_before', function( $attributes ) {
