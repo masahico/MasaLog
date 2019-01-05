@@ -322,8 +322,11 @@ function my_insert_post_data( $data, $postarr ){
 }
 
 // reCAPTCHAを使っているページだけロゴを表示する
+// contact form7関連のコードも読まない
 // https://moriawase.net/contact-form-7-recaptcha-logo
 add_action( 'wp_enqueue_scripts', function() {
 	if(is_page('contact')) return;
+    wp_dequeue_style( 'contact-form-7' );
+    wp_deregister_script( 'contact-form-7' );
     wp_deregister_script( 'google-recaptcha' );
 });
