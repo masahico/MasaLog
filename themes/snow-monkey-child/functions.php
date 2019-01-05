@@ -320,3 +320,10 @@ function my_insert_post_data( $data, $postarr ){
     }
     return $data;
 }
+
+// reCAPTCHAを使っているページだけロゴを表示する
+// https://moriawase.net/contact-form-7-recaptcha-logo
+add_action( 'wp_enqueue_scripts', function() {
+	if(is_page('contact')) return;
+    wp_deregister_script( 'google-recaptcha' );
+});
