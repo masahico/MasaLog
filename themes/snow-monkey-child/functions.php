@@ -19,6 +19,14 @@ add_action( 'wp_enqueue_scripts', function() {
     );
 } );
 
+// 外部スタイルシート読み込み (タベレバ)
+function load_import_css() {
+    wp_enqueue_style( "tabereba_responsive", get_stylesheet_directory_uri()."/tabereba-responsive.css", false );
+    wp_enqueue_style( "kaereba_yomereba_responsive", get_stylesheet_directory_uri()."/yomereba-kaereba-responsive.css", false );
+
+}
+add_action('wp_enqueue_scripts', 'load_import_css');
+
 //スマホ表示分岐
 function is_mobile(){
   $useragents = array(

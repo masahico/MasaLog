@@ -1,0 +1,81 @@
+/*tabereba responsive stylesheet*/
+/* ======================================== */
+/* tabereba Customize Settings 1.0.0 ver */
+/* made it with reference to Hosina's style sheet */
+/* https://mbdb.jp/hacks/kaereba-yomereba-responsive-css.html*/
+/* ======================================== */
+
+.taberebalink-box {
+  width: 100%;
+  margin: 0 0 2rem;
+  padding: 1rem;
+  background: #ffffff;
+  border: 1px solid;
+  border-color: #eaeaea #dddddd #d0d0d0;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  box-sizing: border-box;
+  zoom:1;
+}
+.taberebalink-box:after {
+  content:"";
+  display:block;
+  visibility:hidden;
+  height:0;
+  clear:both;
+}
+.taberebalink-image {
+  float:left;
+  width:150px;
+  margin:0;
+  text-align:center;
+}
+.taberebakink-image img { width:150px; height:auto; }
+.taberebalink-info { margin: 0 0 0 165px; line-height: 1.6rem; }
+.taberebalink-name {
+  font-size: 1.0625rem;
+  font-weight: bold;
+  margin: 0;
+}
+.taberebalink-name a { color: #2b2b2b; }
+.taberebalink-name a:hover { text-decoration: underline; }
+.taberebalink-post { font-size: 0.75rem; font-weight: normal; }
+.taberebalink-catch,.taberebalink-address { font-size: 0.9375rem; margin: 0 0 0.5em; }
+.taberebalink-link1 { width:100%; }
+.taberebalink-link1 div {
+  float: left;
+  width: 49.5%;
+  margin-bottom: 1%;
+  font-size: 0.875rem;
+  font-weight: bold;
+  text-align: center;
+  box-sizing: border-box;
+}
+.taberebalink-link1 div:nth-child(even) { margin-left: 1%; }
+.taberebalink-link1 div a { display:block; padding:3px 0; text-decoration:none; }
+
+.shoplinkhotpepper a {
+  display:block;
+  text-decoration:none;
+  color:#ffffff; background:#C10015;
+}
+
+.booklink-footer { clear:both !important; }
+
+@media only screen and (min-width:460px) and (max-width:640px) {
+	.taberebalink-link1 div { float: none; width: 100%; }
+	.taberebalink-link1 div:nth-child(even) { margin-left: 0; }
+}
+@media only screen and (max-width:459px) {
+	.taberebalink-image {
+	  float:none;
+	  width:100%;
+	  margin:0;
+	  text-align:center;
+	}
+
+	.taberebalink-info { margin: 0; }
+	.taberebalink-link1 div { float: none; width: 100%; }
+	.taberebalink-link1 div:nth-child(even) { margin-left: 0; }
+}
