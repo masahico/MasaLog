@@ -171,7 +171,7 @@
  -webkit-box-ordinal-group:11;
  -ms-flex-order:11;
  -webkit-order:11;
- order:11;
+ order:0;
 }
 
 .shoplinkamazon a, .shoplinkrakuten a, .shoplinkyahoo a, .shoplinkrakukobo a,
