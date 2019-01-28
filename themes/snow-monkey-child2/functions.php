@@ -322,3 +322,13 @@ add_action( 'wp_enqueue_scripts', function() {
     wp_deregister_script( 'contact-form-7' );
     wp_deregister_script( 'google-recaptcha' );
 });
+
+// タグクラウドの最大表示数を変更 ('number' => 0で上限無し)
+function my_tag_cloud_number_filter($args) {
+	$myargs = array(
+		'number' => 200,
+	);
+	$args = wp_parse_args($args, $myargs);
+	return $args;
+}
+add_filter('widget_tag_cloud_args', 'my_tag_cloud_number_filter');
