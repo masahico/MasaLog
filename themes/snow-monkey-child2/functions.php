@@ -258,61 +258,6 @@ function do_post_contents_feeds($content) {
 add_filter('the_excerpt_rss', 'do_post_contents_feeds');
 add_filter('the_content_feed', 'do_post_contents_feeds');
 
-// WordPress記事を修正した時に更新日を変更するかしないかを選択できるようにする
-// https://nelog.jp/update-level-custom
-//管理画面が開いたときに実行
-add_action( 'admin_menu', 'add_update_level_custom_box' );
-//更新ボタンが押されたときに実行
-add_action( 'save_post', 'save_custom_field_postdata' );
-
-//カスタムフィールドを投稿画面に追加
-function add_update_level_custom_box() {
-  //ページ編集画面にカスタムメタボックスを追加
-  add_meta_box( 'update_level', '更新日の変更', 'html_update_level_custom_box', 'post', 'side', 'high' );
-}
-
-//投稿画面に表示するフォームのHTMLソース
-function html_update_level_custom_box() {
-    $post = isset($_GET['post']) ? $_GET['post'] :null;
-  $update_level = get_post_meta( $post, 'update_level' );
-
-  $level = $update_level ? $update_level[0] : null;
-  echo '<div style="padding-top: 3px; overflow: hidden;">';
-  echo '<div style="width: 100px; float: left;"><input name="update_level" type="radio" value="high" ';
-  if( $level=="" || $level=="high" ) echo ' checked="checked"';
-  echo ' />更新する</div><div><input name="update_level" type="radio" value="low" ';
-  if( $level=="low" ) echo ' checked="checked"';
-  echo '/>更新しない<br /></div>';
-  echo '<p class="howto" style="margin-top:1em;">更新日時を変更するかどうかを設定します。誤字修正などで更新日を変更したくない場合は「変更しない」にチェックを入れてください。</p>';
-  echo '</div>';
-}
-
-//設定したカスタムフィールドの値をDBに書き込む記述
-function save_custom_field_postdata( $post_id ) {
-  $mydata = isset($_POST['update_level']) ? $_POST['update_level'] : null;
-  if( "" == get_post_meta( $post_id, 'update_level' )) {
-    /* update_levelというキーでデータが保存されていなかった場合、新しく保存 */
-    add_post_meta( $post_id, 'update_level', $mydata, true ) ;
-  } elseif( $mydata != get_post_meta( $post_id, 'update_level' )) {
-    /* update_levelというキーのデータと、現在のデータが不一致の場合、更新 */
-    update_post_meta( $post_id, 'update_level', $mydata ) ;
-  } elseif( "" == $mydata ) {
-    /* 現在のデータが無い場合、update_levelというキーの値を削除 */
-    delete_post_meta( $post_id, 'update_level' ) ;
-  }
-}
-
-//「更新」以外は更新日時を変更しない
-add_filter( 'wp_insert_post_data', 'my_insert_post_data', 10, 2 );
-function my_insert_post_data( $data, $postarr ){
-  $mydata = isset($_POST['update_level']) ? $_POST['update_level'] : null;
-    if( $mydata == "low" ){
-        unset( $data["post_modified"] );
-        unset( $data["post_modified_gmt"] );
-    }
-    return $data;
-}
-
 // reCAPTCHAを使っているページだけロゴを表示する
 // contact form7関連のコードも読まない
 // https://moriawase.net/contact-form-7-recaptcha-logo
@@ -332,3 +277,136 @@ function my_tag_cloud_number_filter($args) {
 	return $args;
 }
 add_filter('widget_tag_cloud_args', 'my_tag_cloud_number_filter');
+?><?php
+//---------------------------------------------------------------------------
+// 記事投稿(編集)画面に更新レベルのボックス追加
+//---------------------------------------------------------------------------
+
+/* ボックス追加 */
+if( function_exists( 'thk_post_update_level' ) === false ):
+function thk_post_update_level() {
+	add_meta_box( 'update_level', '更新方法', 'post_update_level_box', 'post', 'side', 'default' );
+	add_meta_box( 'update_level', '更新方法', 'post_update_level_box', 'page', 'side', 'default' );
+}
+add_action( 'admin_menu', 'thk_post_update_level' );
+endif;
+
+/* メインフォーム */
+if( function_exists( 'post_update_level_box' ) === false ):
+function post_update_level_box() {
+	global $post;
+?>
+<div style="padding-top: 5px; overflow: hidden;">
+<div style="padding:5px 0"><input name="update_level" type="radio" value="high" checked="checked" />通常更新</div>
+<div style="padding: 5px 0"><input name="update_level" type="radio" value="low" />修正のみ(更新日時を変更せず記事更新)</div>
+<div style="padding: 5px 0"><input name="update_level" type="radio" value="del" />更新日時消去(公開日時と同じにする)</div>
+<div style="padding: 5px 0; margin-bottom: 10px"><input id="update_level_edit" name="update_level" type="radio" value="edit" />更新日時を手動で変更</div>
+<?php
+	if( get_the_modified_date( 'c' ) ) {
+		$stamp = '更新日時: <span style="font-weight:bold">' . get_the_modified_date( __( 'M j, Y @ H:i' ) ) . '</span>';
+	}
+	else {
+		$stamp = '更新日時: <span style="font-weight:bold">未更新</span>';
+	}
+	$date = date_i18n( get_option('date_format') . ' @ ' . get_option('time_format'), strtotime( $post->post_modified ) );
+?>
+<style>
+.modtime { padding: 2px 0 1px 0; display: inline !important; height: auto !important; }
+.modtime:before { font: normal 20px/1 'dashicons'; content: '\f145'; color: #888; padding: 0 5px 0 0; top: -1px; left: -1px; position: relative; vertical-align: top; }
+#timestamp_mod_div { padding-top: 5px; line-height: 23px; }
+#timestamp_mod_div p { margin: 8px 0 6px; }
+#timestamp_mod_div input { border-width: 1px; border-style: solid; }
+#timestamp_mod_div select { height: 21px; line-height: 14px; padding: 0; vertical-align: top;font-size: 12px; }
+#aa_mod, #jj_mod, #hh_mod, #mn_mod { padding: 1px; font-size: 12px; }
+#jj_mod, #hh_mod, #mn_mod { width: 2em; }
+#aa_mod { width: 3.4em; }
+</style>
+<span class="modtime"><?php printf( $stamp, $date ); ?></span>
+<div id="timestamp_mod_div" onkeydown="document.getElementById('update_level_edit').checked=true" onclick="document.getElementById('update_level_edit').checked=true">
+<?php thk_time_mod_form(); ?>
+</div>
+</div>
+<?php
+}
+endif;
+
+/* 更新日時変更の入力フォーム */
+if( function_exists( 'thk_time_mod_form' ) === false ):
+function thk_time_mod_form() {
+	global $wp_locale, $post;
+
+	$tab_index = 0;
+	$tab_index_attribute = '';
+	if ( (int) $tab_index > 0 ) {
+		$tab_index_attribute = ' tabindex="' . $tab_index . '"';
+	}
+
+	$jj_mod = mysql2date( 'd', $post->post_modified, false );
+	$mm_mod = mysql2date( 'm', $post->post_modified, false );
+	$aa_mod = mysql2date( 'Y', $post->post_modified, false );
+	$hh_mod = mysql2date( 'H', $post->post_modified, false );
+	$mn_mod = mysql2date( 'i', $post->post_modified, false );
+	$ss_mod = mysql2date( 's', $post->post_modified, false );
+
+	$year = '<label for="aa_mod" class="screen-reader-text">年' .
+		'</label><input type="text" id="aa_mod" name="aa_mod" value="' .
+		$aa_mod . '" size="4" maxlength="4"' . $tab_index_attribute . ' autocomplete="off" />年';
+
+	$month = '<label for="mm_mod" class="screen-reader-text">月' .
+		'</label><select id="mm_mod" name="mm_mod"' . $tab_index_attribute . ">\n";
+	for( $i = 1; $i < 13; $i = $i +1 ) {
+		$monthnum = zeroise($i, 2);
+		$month .= "\t\t\t" . '<option value="' . $monthnum . '" ' . selected( $monthnum, $mm_mod, false ) . '>';
+		$month .= $wp_locale->get_month_abbrev( $wp_locale->get_month( $i ) );
+		$month .= "</option>\n";
+	}
+	$month .= '</select>';
+
+	$day = '<label for="jj_mod" class="screen-reader-text">日' .
+		'</label><input type="text" id="jj_mod" name="jj_mod" value="' .
+		$jj_mod . '" size="2" maxlength="2"' . $tab_index_attribute . ' autocomplete="off" />日';
+	$hour = '<label for="hh_mod" class="screen-reader-text">時' .
+		'</label><input type="text" id="hh_mod" name="hh_mod" value="' . $hh_mod .
+		'" size="2" maxlength="2"' . $tab_index_attribute . ' autocomplete="off" />';
+	$minute = '<label for="mn_mod" class="screen-reader-text">分' .
+		'</label><input type="text" id="mn_mod" name="mn_mod" value="' . $mn_mod .
+		'" size="2" maxlength="2"' . $tab_index_attribute . ' autocomplete="off" />';
+
+	printf( '%1$s %2$s %3$s @ %4$s : %5$s', $year, $month, $day, $hour, $minute );
+	echo '<input type="hidden" id="ss_mod" name="ss_mod" value="' . $ss_mod . '" />';
+}
+endif;
+
+/* 「修正のみ」は更新しない。それ以外は、それぞれの更新日時に変更する */
+if( function_exists( 'thk_insert_post_data' ) === false ):
+function thk_insert_post_data( $data, $postarr ){
+	$mydata = isset( $_POST['update_level'] ) ? $_POST['update_level'] : null;
+
+	if( $mydata === 'low' ){
+		unset( $data['post_modified'] );
+		unset( $data['post_modified_gmt'] );
+	}
+	elseif( $mydata === 'edit' ) {
+		$aa_mod = $_POST['aa_mod'] <= 0 ? date('Y') : $_POST['aa_mod'];
+		$mm_mod = $_POST['mm_mod'] <= 0 ? date('n') : $_POST['mm_mod'];
+		$jj_mod = $_POST['jj_mod'] > 31 ? 31 : $_POST['jj_mod'];
+		$jj_mod = $jj_mod <= 0 ? date('j') : $jj_mod;
+		$hh_mod = $_POST['hh_mod'] > 23 ? $_POST['hh_mod'] -24 : $_POST['hh_mod'];
+		$mn_mod = $_POST['mn_mod'] > 59 ? $_POST['mn_mod'] -60 : $_POST['mn_mod'];
+		$ss_mod = $_POST['ss_mod'] > 59 ? $_POST['ss_mod'] -60 : $_POST['ss_mod'];
+		$modified_date = sprintf( '%04d-%02d-%02d %02d:%02d:%02d', $aa_mod, $mm_mod, $jj_mod, $hh_mod, $mn_mod, $ss_mod );
+		if ( ! wp_checkdate( $mm_mod, $jj_mod, $aa_mod, $modified_date ) ) {
+			unset( $data['post_modified'] );
+			unset( $data['post_modified_gmt'] );
+			return $data;
+		}
+		$data['post_modified'] = $modified_date;
+		$data['post_modified_gmt'] = get_gmt_from_date( $modified_date );
+	}
+	elseif( $mydata === 'del' ) {
+		$data['post_modified'] = $data['post_date'];
+	}
+	return $data;
+}
+add_filter( 'wp_insert_post_data', 'thk_insert_post_data', 10, 2 );
+endif;
