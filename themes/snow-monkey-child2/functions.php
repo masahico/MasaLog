@@ -175,7 +175,7 @@ function chagne_site_url_html_to_https_plus($the_content){
 add_filter('the_content', 'chagne_site_url_html_to_https_plus', 1);
 
 // 目次は自動表示
-add_filter( 'snow_monkey_display_contents_outline', '__return_true' );
+// add_filter( 'snow_monkey_display_contents_outline', '__return_true' );
 
 // 目次の上にリンクユニットを表示
 add_action( 'inc2734_wp_contents_outline_before', function( $attributes ) {
