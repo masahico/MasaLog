@@ -32,6 +32,11 @@
   text-align:center;
 }
 .kaerebakink-image img, .booklink-image img, .tomarebalink-image img { width:128px; height:auto; }
+
+/* Value Comerceのインプレッション画像を消す      */
+/* https://bibabosi-rizumu.com/kaereba-customize/ */
+.kaerebakink-image img[src^="//ad.jp.ap.valuecommerce.com/servlet/gifbanner"], .booklink-image img[src^="//ad.jp.ap.valuecommerce.com/servlet/gifbanner"], .tomarebalink-image img[src^="//ad.jp.ap.valuecommerce.com/servlet/gifbanner"] { display:none !important; }
+
 .kaerebalink-info, .booklink-info, .tomarebalink-info { margin: 0 0 0 140px; line-height: 1.6rem; }
 .kaerebalink-name, .booklink-name, .tomarebalink-name {
   font-size: 1.0625rem;
@@ -184,8 +189,10 @@
 .shoplinkamazon a { color:#ffffff; background:#ff9900; }
 .shoplinkkindle a { color:#ffffff; background:#1882c9; }
 .shoplinkrakuten a { color:#ffffff; background:#bf0000; }
-/* もしもリンクの時の変な隙間対応 */
-.shoplinkrakuten img { display:none !important;}
+/* もしものインプレッション画像を消す      */
+/* https://bibabosi-rizumu.com/kaereba-customize/ */
+.shoplinkrakuten img[src^="//i.moshimo.com/af/i/impression"]
+ { display:none !important;}
 .shoplinkyahoo a { color:#ffffff; background:#fc1d2f; }
 .shoplinkyahooAuc a { color:#252525; background:#ffdb00; }
 .shoplinkrakukobo a { color:#ffffff; background:#003e9d; }
