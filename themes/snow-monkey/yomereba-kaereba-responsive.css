@@ -31,7 +31,7 @@
   margin:0;
   text-align:center;
 }
-.kaerebakink-image img, .booklink-image img, .tomarebalink-image img { width:128px; height:auto; }
+.kaerebakink-image img, .booklink-image img, .tomarebalink-image img { max-width:128px; height:auto; }
 .kaerebalink-info, .booklink-info, .tomarebalink-info { margin: 0 0 0 140px; line-height: 1.6rem; }
 .kaerebalink-name, .booklink-name, .tomarebalink-name {
   font-size: 1.0625rem;
