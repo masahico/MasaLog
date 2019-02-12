@@ -24,8 +24,8 @@ add_action( 'wp_enqueue_scripts', function() {
 } );
 /* 外部スタイルシート読み込み (タベレバ) */
 function load_import_css() {
-    wp_enqueue_style( "tabereba_responsive", "https://masalog.net/wp-content/themes/snow-monkey/tabereba-responsive.css", false );
-    wp_enqueue_style( "kaereba_yomereba_responsive", "https://masalog.net/wp-content/themes/snow-monkey/yomereba-kaereba-responsive.css", false );
+    wp_enqueue_style( "tabereba_responsive", "https://masalog.net/wp-content/themes/snow-monkey/tabereba-responsive.css");
+    wp_enqueue_style( "kaereba_yomereba_responsive", "https://masalog.net/wp-content/themes/snow-monkey/yomereba-kaereba-responsive.css", array(), '1.0.1' );
 
 }
 add_action('wp_enqueue_scripts', 'load_import_css');
