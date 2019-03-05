@@ -2,7 +2,7 @@
 
 /* =========================================*/
 /* my-style.css                             */
-/* My Style ver 1.0.0                       */
+/* My Style ver 1.0.1                       */
 /* Created by Masahiko Abe                  */
 /* Copyright (c) @masa All rights Reserved. */
 /* ======================================== */
@@ -1053,3 +1053,11 @@ ol.designed li:last-child{
   clear: both;
 }
 
+/************************************************/
+/* リンクユニットが表示されない対策             */
+/* 2019.3.5                                     */
+/************************************************/
+
+.l-heading-widget-area {
+    display: block !important;
+}
