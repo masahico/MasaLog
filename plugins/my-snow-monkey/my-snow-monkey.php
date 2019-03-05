@@ -15,23 +15,33 @@ $theme = wp_get_theme();
 if ( 'snow-monkey' !== $theme->template && 'snow-monkey/resources' !== $theme->template ) {
 	return;
 }
-/* Font Awesome読み込み */
+
+/******************************/
+/* 外部スタイルシート読み込み */
+/******************************/
+function load_import_css() {
+
+/* style.cssの代わり */
+    wp_enqueue_style( "my_style", content_url()."/my-css/my-style.css", array(), '1.0.0' );
+
+    wp_enqueue_style( "kaereba_yomereba_responsive", content_url()."/my-css/yomereba-kaereba-responsive.css", array(), '1.0.1' );
+
+    wp_enqueue_style( "tabereba_responsive", content_url()."/my-css/tabereba-responsive.css",array(),'1.0.0');
+
+}
+add_action('wp_enqueue_scripts', 'load_import_css');
+
+/******************************/
+/* Font Awesome読み込み       */
+/******************************/
 add_action( 'wp_enqueue_scripts', function() {
     wp_enqueue_style(
         'fontawesome5',
         'https://masalog.net/wp-includes/fontawesome/css/fontawesome-all.min.css'
     );
 } );
-/* 外部スタイルシート読み込み (タベレバ) */
-function load_import_css() {
-
-    wp_enqueue_style( "kaereba_yomereba_responsive", content_url()."/my-css/yomereba-kaereba-responsive.css", array(), '1.0.1' );
-
-    wp_enqueue_style( "tabereba_responsive", content_url()."/my-css/tabereba-responsive.css",array(),'1.0.0');
 
 
-}
-add_action('wp_enqueue_scripts', 'load_import_css');
 // WordPressのダブルクォーテーションの自動変換を止める
 remove_filter('the_content', 'wptexturize'); 
 remove_filter('the_excerpt', 'wptexturize'); 
