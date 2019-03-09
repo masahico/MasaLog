@@ -1,6 +1,6 @@
 /* ===============消しちゃダメ============== */
 /* yomereba-kaereba-responsive.css           */
-/* kaereba/yomereba Customize Settings 1.0.1 ver */
+/* kaereba/yomereba Customize Settings 1.0.2 ver */
 /* Created by Cazuki Hoshina */
 /* Copyright (c) @cazuki All rights Reserved. */
 /* ======================================== */
@@ -35,7 +35,7 @@
 
 /* Value Comerceのインプレッション画像を消す      */
 /* https://bibabosi-rizumu.com/kaereba-customize/ */
-.kaerebakink-image img[src^="//ad.jp.ap.valuecommerce.com/servlet/gifbanner"], .booklink-image img[src^="//ad.jp.ap.valuecommerce.com/servlet/gifbanner"], .tomarebalink-image img[src^="//ad.jp.ap.valuecommerce.com/servlet/gifbanner"] { display:none !important; }
+.kaerebakink-image img[src^="//ad.jp.ap.valuecommerce.com/servlet/gifbanner"], .booklink-image img[src^="//ad.jp.ap.valuecommerce.com/servlet/gifbanner"],  .booklink-info img[src^="//ad.jp.ap.valuecommerce.com/servlet/gifbanner"], .tomarebalink-image img[src^="//ad.jp.ap.valuecommerce.com/servlet/gifbanner"] { display:none !important; }
 
 .kaerebalink-info, .booklink-info, .tomarebalink-info { margin: 0 0 0 140px; line-height: 1.6rem; }
 .kaerebalink-name, .booklink-name, .tomarebalink-name {

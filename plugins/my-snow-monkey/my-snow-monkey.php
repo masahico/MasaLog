@@ -24,7 +24,7 @@ function load_import_css() {
 /* style.cssの代わり */
     wp_enqueue_style( "my_style", content_url()."/my-css/my-style.css", array(), '1.0.1' );
 
-    wp_enqueue_style( "kaereba_yomereba_responsive", content_url()."/my-css/yomereba-kaereba-responsive.css", array(), '1.0.1' );
+    wp_enqueue_style( "kaereba_yomereba_responsive", content_url()."/my-css/yomereba-kaereba-responsive.css", array(), '1.0.2' );
 
     wp_enqueue_style( "tabereba_responsive", content_url()."/my-css/tabereba-responsive.css",array(),'1.0.0');
 
