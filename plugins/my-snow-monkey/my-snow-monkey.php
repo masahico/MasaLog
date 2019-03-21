@@ -79,8 +79,7 @@ function add_ad_before_h2_for_2times($the_content) {
 $ad1 = <<< EOF
 <div class=" ad-space">
  <div class="ad-label">スポンサーリンク</div>
-
- <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- 本文中 336x280 -->
 <ins class="adsbygoogle"
      style="display:inline-block;width:336px;height:280px"
@@ -105,8 +104,7 @@ $ad2 = <<< EOF
      data-ad-slot="9033623740"></ins>
 <script>
 (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
+</script></div>
 </div>
 EOF;
 
@@ -130,7 +128,6 @@ EOF;
 $ad4 = <<< EOF
 <div class=" ad-space">
           <div class="ad-label">スポンサーリンク</div>
-
 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <ins class="adsbygoogle"
      style="display:block; text-align:center;"
@@ -140,8 +137,7 @@ $ad4 = <<< EOF
      data-ad-slot="8845921480"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>          
-
+</script>
 <div class="ad-responsive ad-mobile adsense-300">
 <!-- モバイル終了直前 (戻す場合はここ)-->
 </div>
